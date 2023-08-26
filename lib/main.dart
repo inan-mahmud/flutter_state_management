@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/home_page.dart';
-import 'package:flutter_state_management/route_manager.dart';
-import 'package:flutter_state_management/routes.dart';
+import 'package:flutter_state_management/src/core/route/route_manager.dart';
+import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/todo_notifier.dart';
 import 'package:flutter_state_management/todo_provider.dart';
 
-void main() {
+Future<void> main() async {
+
   runApp(const MyApp());
 }
 

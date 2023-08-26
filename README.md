@@ -1,16 +1,5 @@
 # flutter_state_management
 
-A Flutter project on how to manage states without using any 3rd party libraries
+A Flutter todo app demonstrating on how to manage states in app using Value Notifier, Change Notifier, Inherited Widget
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

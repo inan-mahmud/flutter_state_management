@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/routes.dart';
+import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/todo_provider.dart';
 
 class HomePage extends StatefulWidget {
