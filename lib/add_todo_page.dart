@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/todo.dart';
+import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
 import 'package:flutter_state_management/todo_provider.dart';
 
 class AddTodoPage extends StatelessWidget {
@@ -32,7 +32,7 @@ class AddTodoPage extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               todoNotifier.add(
-                    Todo(
+                    TodoEntity(
                       title: _titleController.text,
                       description: _descriptionController.text,
                     ),

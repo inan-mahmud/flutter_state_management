@@ -5,7 +5,7 @@ import 'package:flutter_state_management/src/core/route/not_found_page.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/auth/sign_in/ui/sign_in_page.dart';
 import 'package:flutter_state_management/src/features/auth/sign_up/ui/sign_up_page.dart';
-import 'package:flutter_state_management/src/features/todo/tasks/ui/tasks_page.dart';
+import 'package:flutter_state_management/src/features/tasks/ui/tasks_page.dart';
 import 'package:flutter_state_management/src/features/user_profile/ui/user_profile_page.dart';
 
 class RouteManager {

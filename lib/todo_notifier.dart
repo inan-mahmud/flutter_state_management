@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_state_management/todo.dart';
+import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
 
-class TodoNotifier extends ValueNotifier<List<Todo>> {
+class TodoNotifier extends ValueNotifier<List<TodoEntity>> {
   TodoNotifier() : super([]);
 
-  void add(Todo todo) {
+  void add(TodoEntity todo) {
     value.add(todo);
     notifyListeners();
   }
 
-  void remove(Todo todo) {
+  void remove(TodoEntity todo) {
     value.remove(todo);
     notifyListeners();
   }
@@ -19,7 +19,7 @@ class TodoNotifier extends ValueNotifier<List<Todo>> {
     notifyListeners();
   }
 
-  void update(int index, Todo todo) {
+  void update(int index, TodoEntity todo) {
     value[index] = todo;
     notifyListeners();
   }
