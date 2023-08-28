@@ -1,21 +1,43 @@
-// import 'package:flutter_state_management/objectbox.g.dart';
-// import 'package:path/path.dart' as p;
-// import 'package:path_provider/path_provider.dart';
-//
-// class DatabaseService {
-//   late final Store store;
-//   late final Box<CategoryEntity_> categoryBox;
-//   late final Box<TodoEntity_> todoBox;
-//
-//
-//   DatabaseService._(this.store);
-//
-//   static Future<DatabaseService> create() async {
-//     final docsDir = await getApplicationDocumentsDirectory();
-//     final modelDefinition = getObjectBoxModel();
-//     store = await openStore(
-//       modelDefinition,
-//       directory: p.join(docsDir.path, 'flutter-todo'),
-//     );
-//   }
-// }
+import 'package:flutter_state_management/objectbox.g.dart';
+import 'package:flutter_state_management/src/features/home/data/entities/category_entity.dart';
+import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
+
+class DatabaseService {
+  late final Store store;
+  late final Box<CategoryEntity> _categoryBox;
+  late final Box<TodoEntity> _todoBox;
+
+  DatabaseService._(this.store) {
+    _categoryBox = Box<CategoryEntity>(store);
+    _todoBox = Box<TodoEntity>(store);
+  }
+
+  static Future<DatabaseService> create() async {
+    final store = await openStore();
+    return DatabaseService._(store);
+  }
+
+  Future<int> addCategory(CategoryEntity categoryEntity) {
+    return _categoryBox.putAsync(categoryEntity);
+  }
+
+  Future<int> addTodoEntity(TodoEntity todoEntity) {
+    return _todoBox.putAsync(todoEntity);
+  }
+
+  // Stream<List<C>> getAllCategories() {
+  //   return _categoryBox.getAll();
+  // }
+  //
+  // List<TodoEntity> getAllTodoEntities() {
+  //   return _todoBox.getAll();
+  // }
+  //
+  // CategoryEntity? getCategory(int id) {
+  //   return _categoryBox.get(id);
+  // }
+  //
+  // TodoEntity? getTodoEntity(int id) {
+  //   return _todoBox.get(id);
+  // }
+}

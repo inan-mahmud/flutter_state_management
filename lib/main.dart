@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/route/route_manager.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
+import 'package:flutter_state_management/src/core/service/database/database_service.dart';
 import 'package:flutter_state_management/todo_notifier.dart';
 import 'package:flutter_state_management/todo_provider.dart';
 
-Future<void> main() async {
+late DatabaseService databaseService;
 
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  databaseService = await DatabaseService.create();
   runApp(const MyApp());
 }
 
