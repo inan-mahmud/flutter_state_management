@@ -52,7 +52,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 8674029403964626081),
       name: 'TodoEntity',
-      lastPropertyId: const IdUid(6, 6319585489477536795),
+      lastPropertyId: const IdUid(7, 6237137262047748236),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -86,7 +86,14 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(2, 7236215816285656044),
-            relationTarget: 'CategoryEntity')
+            relationTarget: 'CategoryEntity'),
+        ModelProperty(
+            id: const IdUid(7, 6237137262047748236),
+            name: 'userId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(3, 1458294110807907963),
+            relationTarget: 'UserEntity')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -115,7 +122,8 @@ final _entities = <ModelEntity>[
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[
         ModelBacklink(
-            name: 'categories', srcEntity: 'CategoryEntity', srcField: '')
+            name: 'categories', srcEntity: 'CategoryEntity', srcField: ''),
+        ModelBacklink(name: 'todos', srcEntity: 'TodoEntity', srcField: '')
       ])
 ];
 
@@ -147,7 +155,7 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(3, 1041259315090196693),
-      lastIndexId: const IdUid(2, 7236215816285656044),
+      lastIndexId: const IdUid(3, 1458294110807907963),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -199,7 +207,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     TodoEntity: EntityDefinition<TodoEntity>(
         model: _entities[1],
-        toOneRelations: (TodoEntity object) => [object.category],
+        toOneRelations: (TodoEntity object) => [object.category, object.user],
         toManyRelations: (TodoEntity object) => {},
         getId: (TodoEntity object) => object.id,
         setId: (TodoEntity object, int id) {
@@ -208,13 +216,14 @@ ModelDefinition getObjectBoxModel() {
         objectToFB: (TodoEntity object, fb.Builder fbb) {
           final titleOffset = fbb.writeString(object.title);
           final descriptionOffset = fbb.writeString(object.description);
-          fbb.startTable(7);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, titleOffset);
           fbb.addOffset(2, descriptionOffset);
           fbb.addBool(3, object.isDone);
           fbb.addBool(4, object.isImportant);
           fbb.addInt64(5, object.category.targetId);
+          fbb.addInt64(6, object.user.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -241,6 +250,9 @@ ModelDefinition getObjectBoxModel() {
           object.category.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
           object.category.attach(store);
+          object.user.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.user.attach(store);
           return object;
         }),
     UserEntity: EntityDefinition<UserEntity>(
@@ -249,7 +261,10 @@ ModelDefinition getObjectBoxModel() {
         toManyRelations: (UserEntity object) => {
               RelInfo<CategoryEntity>.toOneBacklink(3, object.id,
                       (CategoryEntity srcObject) => srcObject.user):
-                  object.categories
+                  object.categories,
+              RelInfo<TodoEntity>.toOneBacklink(
+                      7, object.id, (TodoEntity srcObject) => srcObject.user):
+                  object.todos
             },
         getId: (UserEntity object) => object.id,
         setId: (UserEntity object, int id) {
@@ -281,6 +296,11 @@ ModelDefinition getObjectBoxModel() {
               store,
               RelInfo<CategoryEntity>.toOneBacklink(
                   3, object.id, (CategoryEntity srcObject) => srcObject.user));
+          InternalToManyAccess.setRelInfo<UserEntity>(
+              object.todos,
+              store,
+              RelInfo<TodoEntity>.toOneBacklink(
+                  7, object.id, (TodoEntity srcObject) => srcObject.user));
           return object;
         })
   };
@@ -328,6 +348,10 @@ class TodoEntity_ {
   /// see [TodoEntity.category]
   static final category = QueryRelationToOne<TodoEntity, CategoryEntity>(
       _entities[1].properties[5]);
+
+  /// see [TodoEntity.user]
+  static final user =
+      QueryRelationToOne<TodoEntity, UserEntity>(_entities[1].properties[6]);
 }
 
 /// [UserEntity] entity fields to define ObjectBox queries.

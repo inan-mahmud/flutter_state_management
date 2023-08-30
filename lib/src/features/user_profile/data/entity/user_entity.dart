@@ -14,5 +14,8 @@ class UserEntity {
   @Backlink()
   final categories = ToMany<CategoryEntity>();
 
+  @Backlink()
+  final todos = ToMany<TodoEntity>();
+
   UserEntity({this.id = 0, required this.userName, required this.email});
 }

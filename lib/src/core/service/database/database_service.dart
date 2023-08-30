@@ -25,19 +25,30 @@ class DatabaseService {
     return _todoBox.putAsync(todoEntity);
   }
 
-  // Stream<List<C>> getAllCategories() {
-  //   return _categoryBox.getAll();
-  // }
-  //
-  // List<TodoEntity> getAllTodoEntities() {
-  //   return _todoBox.getAll();
-  // }
-  //
-  // CategoryEntity? getCategory(int id) {
-  //   return _categoryBox.get(id);
-  // }
-  //
-  // TodoEntity? getTodoEntity(int id) {
-  //   return _todoBox.get(id);
-  // }
+  Future<List<CategoryEntity>> getAllCategories() {
+    return _categoryBox.getAllAsync();
+  }
+
+  List<CategoryEntity> getTodosByCategory(int categoryId) {
+    final query =
+        _categoryBox.query(CategoryEntity_.id.equals(categoryId)).build();
+    final categories = query.find();
+    return categories;
+  }
+
+// Stream<List<C>> getAllCategories() {
+//   return _categoryBox.getAll();
+// }
+//
+// List<TodoEntity> getAllTodoEntities() {
+//   return _todoBox.getAll();
+// }
+//
+// CategoryEntity? getCategory(int id) {
+//   return _categoryBox.get(id);
+// }
+//
+// TodoEntity? getTodoEntity(int id) {
+//   return _todoBox.get(id);
+// }
 }

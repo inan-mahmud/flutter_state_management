@@ -12,5 +12,6 @@ class TodoModel {
     required this.description,
     required this.isDone,
     required this.isImportant,
+    required this.categoryId,
   });
 }

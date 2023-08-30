@@ -11,4 +11,13 @@ class CategoryRepository {
       return Failure(exception);
     }
   }
+
+  // Future<Result<List<CategoryEntity>, Exception>> getAllCategories() async {
+  //   try {
+  //     final categories = await databaseService.getAllCategories();
+  //     return Success(categories);
+  //   } on Exception catch (exception) {
+  //     return Failure(exception);
+  //   }
+  // }
 }

@@ -32,7 +32,7 @@
     },
     {
       "id": "2:8674029403964626081",
-      "lastPropertyId": "6:6319585489477536795",
+      "lastPropertyId": "7:6237137262047748236",
       "name": "TodoEntity",
       "properties": [
         {
@@ -68,6 +68,14 @@
           "flags": 520,
           "indexId": "2:7236215816285656044",
           "relationTarget": "CategoryEntity"
+        },
+        {
+          "id": "7:6237137262047748236",
+          "name": "userId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:1458294110807907963",
+          "relationTarget": "UserEntity"
         }
       ],
       "relations": []
@@ -98,7 +106,7 @@
     }
   ],
   "lastEntityId": "3:1041259315090196693",
-  "lastIndexId": "2:7236215816285656044",
+  "lastIndexId": "3:1458294110807907963",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

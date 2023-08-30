@@ -17,6 +17,7 @@ class TodoEntity {
 
   final category = ToOne<CategoryEntity>();
 
+  final user = ToOne<UserEntity>();
 
   TodoEntity(
       {this.id = 0,
