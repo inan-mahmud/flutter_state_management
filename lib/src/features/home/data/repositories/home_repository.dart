@@ -1,51 +1,51 @@
 import 'package:flutter_state_management/main.dart';
-import 'package:flutter_state_management/src/core/base/result.dart';
+import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/features/home/data/entities/category_entity.dart';
 import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
 
-class CategoryRepository {
-  Result<int, Exception> createCategory(CategoryEntity category) {
+class HomeRepository {
+  Either<Exception, int> createCategory(CategoryEntity category) {
     try {
       final id = databaseService.addCategory(category);
-      return Success(id);
+      return right(id);
     } on Exception catch (exception) {
-      return Failure(exception);
+      return left(exception);
     }
   }
 
-  Result<List<CategoryEntity>, Exception> fetchCategories() {
+  Either<Exception, List<CategoryEntity>> fetchCategories() {
     try {
       final categories = databaseService.fetchCategories();
-      return Success(categories);
+      return right(categories);
     } on Exception catch (exception) {
-      return Failure(exception);
+      return left(exception);
     }
   }
 
-  Result<List<TodoEntity>, Exception> fetchTodosByCategory(int categoryId) {
+  Either<Exception, List<TodoEntity>> fetchTodosByCategory(int categoryId) {
     try {
       final todos = databaseService.fetchTodosByCategory(categoryId);
-      return Success(todos);
+      return right(todos);
     } on Exception catch (exception) {
-      return Failure(exception);
+      return left(exception);
     }
   }
 
-  Result<int,Exception> addTodo(TodoEntity todoEntity){
+  Either<Exception, int> addTodo(TodoEntity todoEntity) {
     try {
       final id = databaseService.addTodoEntity(todoEntity);
-      return Success(id);
+      return right(id);
     } on Exception catch (exception) {
-      return Failure(exception);
+      return left(exception);
     }
   }
 
-  Result<int,Exception> updateTodoEntity(TodoEntity todoEntity) {
+  Either<Exception, int> updateTodoEntity(TodoEntity todoEntity) {
     try {
       final id = databaseService.addTodoEntity(todoEntity);
-      return Success(id);
+      return right(id);
     } on Exception catch (exception) {
-      return Failure(exception);
+      return left(exception);
     }
   }
 
