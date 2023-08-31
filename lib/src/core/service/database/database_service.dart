@@ -17,23 +17,32 @@ class DatabaseService {
     return DatabaseService._(store);
   }
 
-  Future<int> addCategory(CategoryEntity categoryEntity) {
-    return _categoryBox.putAsync(categoryEntity);
+  int addCategory(CategoryEntity categoryEntity) {
+    return _categoryBox.put(categoryEntity);
   }
 
-  Future<int> addTodoEntity(TodoEntity todoEntity) {
-    return _todoBox.putAsync(todoEntity);
+  int addTodoEntity(TodoEntity todoEntity) {
+    return _todoBox.put(todoEntity);
   }
 
-  Future<List<CategoryEntity>> getAllCategories() {
-    return _categoryBox.getAllAsync();
+  List<CategoryEntity> fetchCategories() {
+    return _categoryBox.getAll();
   }
 
-  List<CategoryEntity> getTodosByCategory(int categoryId) {
-    final query =
-        _categoryBox.query(CategoryEntity_.id.equals(categoryId)).build();
-    final categories = query.find();
-    return categories;
+  List<TodoEntity> fetchTodosByCategory(int categoryId) {
+    final queryBuilder = _todoBox.query();
+    queryBuilder.link(
+        TodoEntity_.category, CategoryEntity_.id.equals(categoryId));
+    final query = queryBuilder.build();
+    return query.find();
+  }
+
+  int updateCategoryEntity(CategoryEntity categoryEntity){
+    return _categoryBox.put(categoryEntity);
+  }
+
+  int updateTodoEntity(TodoEntity todoEntity) {
+    return _todoBox.put(todoEntity);
   }
 
 // Stream<List<C>> getAllCategories() {

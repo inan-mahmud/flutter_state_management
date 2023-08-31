@@ -9,10 +9,20 @@ class CategoryEntity {
 
   String title;
 
+  DateTime createdAt;
+
+  DateTime updatedAt;
+
   @Backlink()
   final todos = ToMany<TodoEntity>();
 
   final user = ToOne<UserEntity>();
 
-  CategoryEntity({this.id = 0, required this.title});
+  CategoryEntity(
+      {this.id = 0,
+      required this.title,
+      DateTime? createdAt,
+      DateTime? updatedAt})
+      : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 }

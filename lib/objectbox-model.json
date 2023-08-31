@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:6848051843973750637",
-      "lastPropertyId": "3:4951578403033103094",
+      "lastPropertyId": "5:2855717816864190171",
       "name": "CategoryEntity",
       "properties": [
         {
@@ -26,13 +26,23 @@
           "flags": 520,
           "indexId": "1:1609956993769315913",
           "relationTarget": "UserEntity"
+        },
+        {
+          "id": "4:2231288387448193202",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:2855717816864190171",
+          "name": "updatedAt",
+          "type": 10
         }
       ],
       "relations": []
     },
     {
       "id": "2:8674029403964626081",
-      "lastPropertyId": "7:6237137262047748236",
+      "lastPropertyId": "9:1380786025019093210",
       "name": "TodoEntity",
       "properties": [
         {
@@ -76,6 +86,16 @@
           "flags": 520,
           "indexId": "3:1458294110807907963",
           "relationTarget": "UserEntity"
+        },
+        {
+          "id": "8:7723279877325950793",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "9:1380786025019093210",
+          "name": "updatedAt",
+          "type": 10
         }
       ],
       "relations": []

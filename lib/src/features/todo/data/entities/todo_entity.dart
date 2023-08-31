@@ -15,6 +15,10 @@ class TodoEntity {
 
   bool isImportant;
 
+  DateTime createdAt;
+
+  DateTime updatedAt;
+
   final category = ToOne<CategoryEntity>();
 
   final user = ToOne<UserEntity>();
@@ -24,5 +28,9 @@ class TodoEntity {
       required this.title,
       this.description = '',
       this.isDone = false,
-      this.isImportant = false});
+      this.isImportant = false,
+      DateTime? createdAt,
+      DateTime? updatedAt})
+      : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 }

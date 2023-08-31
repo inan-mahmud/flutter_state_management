@@ -24,7 +24,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 6848051843973750637),
       name: 'CategoryEntity',
-      lastPropertyId: const IdUid(3, 4951578403033103094),
+      lastPropertyId: const IdUid(5, 2855717816864190171),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -43,7 +43,17 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(1, 1609956993769315913),
-            relationTarget: 'UserEntity')
+            relationTarget: 'UserEntity'),
+        ModelProperty(
+            id: const IdUid(4, 2231288387448193202),
+            name: 'createdAt',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 2855717816864190171),
+            name: 'updatedAt',
+            type: 10,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[
@@ -52,7 +62,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 8674029403964626081),
       name: 'TodoEntity',
-      lastPropertyId: const IdUid(7, 6237137262047748236),
+      lastPropertyId: const IdUid(9, 1380786025019093210),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -93,7 +103,17 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(3, 1458294110807907963),
-            relationTarget: 'UserEntity')
+            relationTarget: 'UserEntity'),
+        ModelProperty(
+            id: const IdUid(8, 7723279877325950793),
+            name: 'createdAt',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(9, 1380786025019093210),
+            name: 'updatedAt',
+            type: 10,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -180,10 +200,12 @@ ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (CategoryEntity object, fb.Builder fbb) {
           final titleOffset = fbb.writeString(object.title);
-          fbb.startTable(4);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, titleOffset);
           fbb.addInt64(2, object.user.targetId);
+          fbb.addInt64(3, object.createdAt.millisecondsSinceEpoch);
+          fbb.addInt64(4, object.updatedAt.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -194,7 +216,15 @@ ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final titleParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
-          final object = CategoryEntity(id: idParam, title: titleParam);
+          final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
+          final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
+          final object = CategoryEntity(
+              id: idParam,
+              title: titleParam,
+              createdAt: createdAtParam,
+              updatedAt: updatedAtParam);
           object.user.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
           object.user.attach(store);
@@ -216,7 +246,7 @@ ModelDefinition getObjectBoxModel() {
         objectToFB: (TodoEntity object, fb.Builder fbb) {
           final titleOffset = fbb.writeString(object.title);
           final descriptionOffset = fbb.writeString(object.description);
-          fbb.startTable(8);
+          fbb.startTable(10);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, titleOffset);
           fbb.addOffset(2, descriptionOffset);
@@ -224,6 +254,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addBool(4, object.isImportant);
           fbb.addInt64(5, object.category.targetId);
           fbb.addInt64(6, object.user.targetId);
+          fbb.addInt64(7, object.createdAt.millisecondsSinceEpoch);
+          fbb.addInt64(8, object.updatedAt.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -241,12 +273,18 @@ ModelDefinition getObjectBoxModel() {
               const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
           final isImportantParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
+          final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0));
+          final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0));
           final object = TodoEntity(
               id: idParam,
               title: titleParam,
               description: descriptionParam,
               isDone: isDoneParam,
-              isImportant: isImportantParam);
+              isImportant: isImportantParam,
+              createdAt: createdAtParam,
+              updatedAt: updatedAtParam);
           object.category.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
           object.category.attach(store);
@@ -321,6 +359,14 @@ class CategoryEntity_ {
   /// see [CategoryEntity.user]
   static final user = QueryRelationToOne<CategoryEntity, UserEntity>(
       _entities[0].properties[2]);
+
+  /// see [CategoryEntity.createdAt]
+  static final createdAt =
+      QueryIntegerProperty<CategoryEntity>(_entities[0].properties[3]);
+
+  /// see [CategoryEntity.updatedAt]
+  static final updatedAt =
+      QueryIntegerProperty<CategoryEntity>(_entities[0].properties[4]);
 }
 
 /// [TodoEntity] entity fields to define ObjectBox queries.
@@ -352,6 +398,14 @@ class TodoEntity_ {
   /// see [TodoEntity.user]
   static final user =
       QueryRelationToOne<TodoEntity, UserEntity>(_entities[1].properties[6]);
+
+  /// see [TodoEntity.createdAt]
+  static final createdAt =
+      QueryIntegerProperty<TodoEntity>(_entities[1].properties[7]);
+
+  /// see [TodoEntity.updatedAt]
+  static final updatedAt =
+      QueryIntegerProperty<TodoEntity>(_entities[1].properties[8]);
 }
 
 /// [UserEntity] entity fields to define ObjectBox queries.
