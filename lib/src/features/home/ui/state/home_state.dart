@@ -19,40 +19,42 @@ class HomeStateFailure extends HomeState {
 }
 
 extension HomeStateExtensions on HomeState {
-  void when({
-    required void Function() initial,
-    required void Function() loading,
-    required void Function(List<CategoryModel> categories) success,
-    required void Function(String message) failure,
+  R when<R extends Object?>({
+    required R Function() initial,
+    required R Function() loading,
+    required R Function(List<CategoryModel> categories) success,
+    required R Function(String message) failure,
   }) {
     if (this is HomeStateInitial) {
-      initial.call();
+      return initial.call();
     } else if (this is HomeStateLoading) {
-      loading.call();
+      return loading.call();
     } else if (this is HomeStateSuccess) {
-      success.call((this as HomeStateSuccess).categories);
+      return success.call((this as HomeStateSuccess).categories);
     } else if (this is HomeStateFailure) {
-      failure.call((this as HomeStateFailure).message);
+      return failure.call((this as HomeStateFailure).message);
+    } else {
+      return initial.call();
     }
   }
 
-  void maybeWhen({
-    void Function()? initial,
-    void Function()? loading,
-    void Function(List<CategoryModel> categories)? success,
-    void Function(String message)? failure,
-    void Function()? orElse,
+  R? maybeWhen<R extends Object?>({
+    R? Function()? initial,
+    R? Function()? loading,
+    R? Function(List<CategoryModel> categories)? success,
+    R? Function(String message)? failure,
+    R? Function()? orElse,
   }) {
     if (this is HomeStateInitial) {
-      initial?.call();
+      return initial?.call();
     } else if (this is HomeStateLoading) {
-      loading?.call();
+      return loading?.call();
     } else if (this is HomeStateSuccess) {
-      success?.call((this as HomeStateSuccess).categories);
+      return success?.call((this as HomeStateSuccess).categories);
     } else if (this is HomeStateFailure) {
-      failure?.call((this as HomeStateFailure).message);
+      return failure?.call((this as HomeStateFailure).message);
     } else {
-      orElse?.call();
+      return orElse?.call();
     }
   }
 }

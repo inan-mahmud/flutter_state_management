@@ -7,12 +7,19 @@ class CategoriesNotifier extends ValueNotifier<HomeState> {
 
   CategoriesNotifier(this.fetchCategoryUseCase) : super(HomeStateInitial());
 
-  void fetchCategories() {
+  Future<void> fetchCategories() async {
+    value = HomeStateLoading();
+    await Future.delayed(
+      const Duration(seconds: 1),
+    );
     final result = fetchCategoryUseCase.fetchCategories();
-    result.fold((failure) {
-      value = HomeStateFailure(failure.message);
-    }, (categories) {
-      value = HomeStateSuccess(categories);
-    });
+    result.fold(
+      (failure) {
+        value = HomeStateFailure(failure.message);
+      },
+      (categories) {
+        value = HomeStateSuccess(categories);
+      },
+    );
   }
 }
