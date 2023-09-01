@@ -12,3 +12,4 @@ extension TodoMapper on TodoEntity {
         isImportant: isImportant);
   }
 }
+
