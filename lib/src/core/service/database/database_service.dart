@@ -4,10 +4,12 @@ import 'package:flutter_state_management/src/features/todo/data/entities/todo_en
 
 class DatabaseService {
   late final Store store;
+
   late final Box<CategoryEntity> _categoryBox;
   late final Box<TodoEntity> _todoBox;
 
-  DatabaseService._(this.store) {
+  DatabaseService
+      ._(this.store) {
     _categoryBox = Box<CategoryEntity>(store);
     _todoBox = Box<TodoEntity>(store);
   }
@@ -44,20 +46,4 @@ class DatabaseService {
   int updateTodoEntity(TodoEntity todoEntity) {
     return _todoBox.put(todoEntity);
   }
-
-// Stream<List<C>> getAllCategories() {
-//   return _categoryBox.getAll();
-// }
-//
-// List<TodoEntity> getAllTodoEntities() {
-//   return _todoBox.getAll();
-// }
-//
-// CategoryEntity? getCategory(int id) {
-//   return _categoryBox.get(id);
-// }
-//
-// TodoEntity? getTodoEntity(int id) {
-//   return _todoBox.get(id);
-// }
 }

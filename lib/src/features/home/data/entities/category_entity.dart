@@ -16,6 +16,7 @@ class CategoryEntity {
   @Backlink()
   final todos = ToMany<TodoEntity>();
 
+  @Backlink()
   final user = ToOne<UserEntity>();
 
   CategoryEntity(

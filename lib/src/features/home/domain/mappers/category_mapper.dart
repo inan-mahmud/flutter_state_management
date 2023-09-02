@@ -2,13 +2,20 @@ import 'package:flutter_state_management/src/features/home/data/entities/categor
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/todo/domain/mapper/todo_mapper.dart';
 
-extension CategoryMapper on CategoryEntity {
+extension ToCategoryModel on CategoryEntity {
   CategoryModel toModel() {
     return CategoryModel(
       id: id,
       title: title,
-      userId: user.targetId,
-      todos: todos.map((todo) => todo.toModel()).toList(),
+    );
+  }
+}
+
+extension ToCategoryEntity on CategoryModel {
+  CategoryEntity toEntity() {
+    return CategoryEntity(
+      id: id ?? 0,
+      title: title,
     );
   }
 }

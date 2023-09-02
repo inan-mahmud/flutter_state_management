@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/data/repositories/home_repository.dart';
-import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
-import 'package:flutter_state_management/src/features/home/ui/notifiers/cateogries_notifier.dart';
-import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
+import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/category_inherited_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,51 +9,57 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final CategoriesNotifier categoriesNotifier =
-      CategoriesNotifier(FetchCategoryUseCase(HomeRepository()));
+  final textController = TextEditingController();
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      categoriesNotifier.fetchCategories();
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      CategoryInheritedWidget
+          .of(context)
+          .categoriesNotifier
+          .fetchCategories();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = CategoryInheritedWidget
+        .of(context)
+        .categoriesNotifier;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Home'), centerTitle: true),
-      body: ValueListenableBuilder(
-        valueListenable: categoriesNotifier,
-        builder: (context, state, child) {
-          return state.when(initial: () {
-            return const SizedBox();
-          }, loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }, success: (categories) {
-            return categories.isNotEmpty
-                ? ListView.builder(
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      return Text(categories[index].title);
-                    },
-                  )
-                : const Center(
-                    child: Text(
-                        "No categories or todos found, you can create new categories or todos from the bottom right button,"),
-                  );
-          }, failure: (message) {
-            return const SizedBox();
-          });
-        },
-      ),
+      body: Container(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          showAdaptiveDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                    title: const Text('Add Category'),
+                    content: TextFormField(
+                      controller: textController,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // viewModel.createCategory(
+                          //   CategoryModel(title: textController.text),
+                          // );
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Add'),
+                      )
+                    ]);
+              });
         },
         child: const Icon(Icons.add),
       ),

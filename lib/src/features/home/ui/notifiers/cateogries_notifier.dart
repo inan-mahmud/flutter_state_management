@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 
@@ -29,13 +30,16 @@ class CategoriesNotifier extends ValueNotifier<HomeState> {
 
 class CategoriesViewModel extends ChangeNotifier {
   final FetchCategoryUseCase fetchCategoryUseCase;
+  final CreateCategoryUseCase createCategoryUseCase;
 
   final List<CategoryModel> _categories = [];
 
   UnmodifiableListView<CategoryModel> get categories =>
       UnmodifiableListView(_categories);
 
-  CategoriesViewModel(this.fetchCategoryUseCase);
+  CategoriesViewModel(
+      {required this.fetchCategoryUseCase,
+      required this.createCategoryUseCase});
 
   HomeState state = HomeStateInitial();
 
@@ -54,6 +58,10 @@ class CategoriesViewModel extends ChangeNotifier {
     );
   }
 
-  void addCategory(CategoryModel category) {
+  void createCategory(CategoryModel category) {
+    createCategoryUseCase.createCategory(category).fold(
+          (failure) => state = HomeStateFailure(failure.message),
+          (id) => fetchCategories(),
+        );
   }
 }

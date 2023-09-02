@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
 import 'package:flutter_state_management/src/features/home/data/repositories/category_repository.dart';
@@ -5,21 +6,20 @@ import 'package:flutter_state_management/src/features/home/data/repositories/hom
 import 'package:flutter_state_management/src/features/home/domain/mappers/category_mapper.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 
-class FetchCategoryUseCase {
+class CreateCategoryUseCase {
   final CategoryRepository categoryRepository;
 
-  FetchCategoryUseCase(this.categoryRepository);
+  const CreateCategoryUseCase(this.categoryRepository);
 
-  Either<Failure, List<CategoryModel>> fetchCategories() {
-    return categoryRepository.fetchCategories().fold(
-          (exception) => left(
-            Failure(
-              message: exception.toString(),
-            ),
-          ),
-          (categories) => right(
-            categories.map((category) => category.toModel()).toList(),
-          ),
+  Either<Failure, int> createCategory(CategoryModel category) {
+    return categoryRepository.createCategory(category.toEntity()).fold(
+      (exception) {
+        debugPrint("Add Category Exception $exception");
+        return left(
+          Failure(message: 'Something went wrong, Please try again'),
         );
+      },
+      (id) => right(id),
+    );
   }
 }
