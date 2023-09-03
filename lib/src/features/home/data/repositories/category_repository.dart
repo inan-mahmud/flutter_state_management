@@ -29,4 +29,16 @@ class CategoryRepository {
       return left(exception);
     }
   }
+
+  Either<Exception, Stream<List<CategoryEntity>>> fetchCategoriesStream() {
+    try {
+      final categories = _categoryBox
+          .query()
+          .watch(triggerImmediately: true)
+          .map((event) => event.find());
+      return right(categories);
+    } on Exception catch (exception) {
+      return left(exception);
+    }
+  }
 }

@@ -1,32 +1,10 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
-import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
-
-class CategoriesNotifier extends ValueNotifier<HomeState> {
-  final FetchCategoryUseCase fetchCategoryUseCase;
-
-  CategoriesNotifier(this.fetchCategoryUseCase) : super(HomeStateInitial());
-
-  Future<void> fetchCategories() async {
-    value = HomeStateLoading();
-    await Future.delayed(
-      const Duration(seconds: 1),
-    );
-    final result = fetchCategoryUseCase.fetchCategories();
-    result.fold(
-      (failure) {
-        value = HomeStateFailure(failure.message);
-      },
-      (categories) {
-        value = HomeStateSuccess(categories);
-      },
-    );
-  }
-}
 
 class CategoriesViewModel extends ChangeNotifier {
   final FetchCategoryUseCase fetchCategoryUseCase;
@@ -52,15 +30,15 @@ class CategoriesViewModel extends ChangeNotifier {
         notifyListeners();
       },
       (success) {
+        print(success);
         _errorMessage = '';
-        _categories.clear();
         _categories.addAll(success);
         notifyListeners();
       },
     );
   }
 
-  void createCategory(CategoryModel category) {
+  void createCategory(String category) {
     createCategoryUseCase.createCategory(category).fold(
       (failure) {
         _errorMessage = failure.message;
@@ -68,5 +46,30 @@ class CategoriesViewModel extends ChangeNotifier {
       },
       (id) => fetchCategories(),
     );
+  }
+}
+
+class CategoriesController {
+  final _todoStreamController = StreamController<List<CategoryModel>>();
+
+  Stream<List<CategoryModel>> get categoryStream =>
+      _todoStreamController.stream;
+
+  final FetchCategoryUseCase fetchCategoryUseCase;
+
+  CategoriesController({required this.fetchCategoryUseCase});
+
+  void fetchCategories() {
+    fetchCategoryUseCase.fetchCategoriesStream().fold((failure) {
+      _todoStreamController.addError(failure.message);
+    }, (stream) {
+      stream.listen((categories) {
+        _todoStreamController.add(categories);
+      });
+    });
+  }
+
+  void addCategory(String categoryName){
+
   }
 }

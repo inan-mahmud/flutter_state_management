@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/category_controller_model.dart';
 import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/category_inherited_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,14 +17,16 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      CategoryInheritedWidget.of(context).categoriesNotifier.fetchCategories();
+     // CategoryInheritedWidget.of(context).categoriesNotifier.fetchCategories();
+      CategoryControllerModel.of(context).categoriesNotifier.fetchCategories();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+   // final viewModel = CategoryInheritedWidget.of(context).categoriesNotifier;
 
-    final viewModel = CategoryInheritedWidget.of(context).categoriesNotifier;
+    final model = CategoryControllerModel.of(context).categoriesNotifier;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -30,24 +34,30 @@ class _HomeViewState extends State<HomeView> {
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
-        child: viewModel.errorMessage.isNotEmpty
-            ? Center(
-                child: Text(viewModel.errorMessage),
-              )
-            : viewModel.categories.isNotEmpty
-                ? ListView.builder(
-                    itemCount: viewModel.categories.length,
+        child: StreamBuilder<List<CategoryModel>>(
+            stream: model.categoryStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final categories = snapshot.data!;
+                return ListView.builder(
+                    itemCount: categories.length,
                     itemBuilder: (context, index) {
-                      final category = viewModel.categories[index];
+                      final category = snapshot.data![index];
                       return ListTile(
                           title: Text(
                         category.title,
                       ));
-                    },
-                  )
-                : const Center(
-                    child: Text('No Categories'),
-                  ),
+                    });
+              } else {
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -68,9 +78,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // viewModel.createCategory(
-                          //   CategoryModel(title: textController.text),
-                          // );
+                          //viewModel.createCategory(textController.text);
                           Navigator.pop(context);
                         },
                         child: const Text('Add'),
@@ -83,3 +91,20 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+
+/**
+ *  viewModel.categories.isNotEmpty
+    ? ListView.builder(
+    itemCount: viewModel.categories.length,
+    itemBuilder: (context, index) {
+    final category = viewModel.categories[index];
+    return ListTile(
+    title: Text(
+    category.title,
+    ));
+    },
+    )
+    : const Center(
+    child: Text('No Categories'),
+    ),
+ */
