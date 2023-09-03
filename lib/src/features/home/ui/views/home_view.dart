@@ -15,23 +15,40 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      CategoryInheritedWidget
-          .of(context)
-          .categoriesNotifier
-          .fetchCategories();
+      CategoryInheritedWidget.of(context).categoriesNotifier.fetchCategories();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = CategoryInheritedWidget
-        .of(context)
-        .categoriesNotifier;
+
+    final viewModel = CategoryInheritedWidget.of(context).categoriesNotifier;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Home'), centerTitle: true),
-      body: Container(),
+      body: SizedBox(
+        height: MediaQuery.sizeOf(context).height,
+        width: MediaQuery.sizeOf(context).width,
+        child: viewModel.errorMessage.isNotEmpty
+            ? Center(
+                child: Text(viewModel.errorMessage),
+              )
+            : viewModel.categories.isNotEmpty
+                ? ListView.builder(
+                    itemCount: viewModel.categories.length,
+                    itemBuilder: (context, index) {
+                      final category = viewModel.categories[index];
+                      return ListTile(
+                          title: Text(
+                        category.title,
+                      ));
+                    },
+                  )
+                : const Center(
+                    child: Text('No Categories'),
+                  ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showAdaptiveDialog(

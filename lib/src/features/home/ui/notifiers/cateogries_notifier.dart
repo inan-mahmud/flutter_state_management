@@ -34,6 +34,10 @@ class CategoriesViewModel extends ChangeNotifier {
 
   final List<CategoryModel> _categories = [];
 
+  String _errorMessage = '';
+
+  String get errorMessage => _errorMessage;
+
   UnmodifiableListView<CategoryModel> get categories =>
       UnmodifiableListView(_categories);
 
@@ -41,18 +45,16 @@ class CategoriesViewModel extends ChangeNotifier {
       {required this.fetchCategoryUseCase,
       required this.createCategoryUseCase});
 
-  HomeState state = HomeStateInitial();
-
   void fetchCategories() {
     fetchCategoryUseCase.fetchCategories().fold(
       (failure) {
-        state = HomeStateFailure(failure.message);
+        _errorMessage = failure.message;
         notifyListeners();
       },
-      (categories) {
+      (success) {
+        _errorMessage = '';
         _categories.clear();
-        _categories.addAll(categories);
-        state = HomeStateSuccess(_categories);
+        _categories.addAll(success);
         notifyListeners();
       },
     );
@@ -60,8 +62,11 @@ class CategoriesViewModel extends ChangeNotifier {
 
   void createCategory(CategoryModel category) {
     createCategoryUseCase.createCategory(category).fold(
-          (failure) => state = HomeStateFailure(failure.message),
-          (id) => fetchCategories(),
-        );
+      (failure) {
+        _errorMessage = failure.message;
+        notifyListeners();
+      },
+      (id) => fetchCategories(),
+    );
   }
 }
