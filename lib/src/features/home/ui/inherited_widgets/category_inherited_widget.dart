@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/ui/notifiers/cateogries_notifier.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/cateogries_notifier.dart';
+
 
 class CategoryInheritedWidget extends InheritedWidget {
   final CategoriesViewModel categoriesNotifier;

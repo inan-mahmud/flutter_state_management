@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/category_interface.dart';
 
 class CategoriesViewModel extends ChangeNotifier {
   final FetchCategoryUseCase fetchCategoryUseCase;
@@ -57,10 +58,12 @@ class CategoriesController {
 
   final FetchCategoryUseCase fetchCategoryUseCase;
   final CreateCategoryUseCase createCategoryUseCase;
+  final CategoryInterface categoryInterface;
 
   CategoriesController(
       {required this.createCategoryUseCase,
-      required this.fetchCategoryUseCase});
+      required this.fetchCategoryUseCase,
+      required this.categoryInterface});
 
   void fetchCategories() {
     fetchCategoryUseCase.fetchCategoriesStream().fold((failure) {
@@ -72,11 +75,11 @@ class CategoriesController {
     });
   }
 
-  void addCategory(String categoryName) {
+  void createCategory(String categoryName) {
     createCategoryUseCase.createCategory(categoryName).fold((failure) {
-      _todoStreamController.addError(failure.message);
+      categoryInterface.onCreateCategoryFailure(failure.message);
     }, (id) {
-
+      categoryInterface.onCreateCategorySuccess();
     });
   }
 }
