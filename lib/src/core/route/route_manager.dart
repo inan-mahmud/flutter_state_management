@@ -22,6 +22,7 @@ class RouteManager {
               CategoryControllerModel(
                 categoriesNotifier: CategoriesController(
                   fetchCategoryUseCase: locator(),
+                  createCategoryUseCase: locator(),
                 ),
                 child: const HomeView(),
               ),

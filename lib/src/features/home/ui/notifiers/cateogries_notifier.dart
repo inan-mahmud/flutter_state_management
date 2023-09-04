@@ -56,8 +56,11 @@ class CategoriesController {
       _todoStreamController.stream;
 
   final FetchCategoryUseCase fetchCategoryUseCase;
+  final CreateCategoryUseCase createCategoryUseCase;
 
-  CategoriesController({required this.fetchCategoryUseCase});
+  CategoriesController(
+      {required this.createCategoryUseCase,
+      required this.fetchCategoryUseCase});
 
   void fetchCategories() {
     fetchCategoryUseCase.fetchCategoriesStream().fold((failure) {
@@ -69,7 +72,11 @@ class CategoriesController {
     });
   }
 
-  void addCategory(String categoryName){
+  void addCategory(String categoryName) {
+    createCategoryUseCase.createCategory(categoryName).fold((failure) {
+      _todoStreamController.addError(failure.message);
+    }, (id) {
 
+    });
   }
 }

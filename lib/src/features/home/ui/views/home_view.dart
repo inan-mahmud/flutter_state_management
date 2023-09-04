@@ -78,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       TextButton(
                         onPressed: () {
-                          //viewModel.createCategory(textController.text);
+                          model.addCategory(textController.text);
                           Navigator.pop(context);
                         },
                         child: const Text('Add'),
