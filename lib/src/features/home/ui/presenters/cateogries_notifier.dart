@@ -1,56 +1,54 @@
 import 'dart:async';
-import 'dart:collection';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/ui/presenters/category_interface.dart';
 
-class CategoriesViewModel extends ChangeNotifier {
-  final FetchCategoryUseCase fetchCategoryUseCase;
-  final CreateCategoryUseCase createCategoryUseCase;
+// class CategoriesViewModel extends ChangeNotifier {
+//   final FetchCategoryUseCase fetchCategoryUseCase;
+//   final CreateCategoryUseCase createCategoryUseCase;
+//
+//   final List<CategoryModel> _categories = [];
+//
+//   String _errorMessage = '';
+//
+//   String get errorMessage => _errorMessage;
+//
+//   UnmodifiableListView<CategoryModel> get categories =>
+//       UnmodifiableListView(_categories);
+//
+//   CategoriesViewModel(
+//       {required this.fetchCategoryUseCase,
+//       required this.createCategoryUseCase});
+//
+//   void fetchCategories() {
+//     fetchCategoryUseCase.fetchCategories().fold(
+//       (failure) {
+//         _errorMessage = failure.message;
+//         notifyListeners();
+//       },
+//       (success) {
+//         print(success);
+//         _errorMessage = '';
+//         _categories.addAll(success);
+//         notifyListeners();
+//       },
+//     );
+//   }
+//
+//   void createCategory(String category) {
+//     createCategoryUseCase.createCategory(category).fold(
+//       (failure) {
+//         _errorMessage = failure.message;
+//         notifyListeners();
+//       },
+//       (id) => fetchCategories(),
+//     );
+//   }
+// }
 
-  final List<CategoryModel> _categories = [];
-
-  String _errorMessage = '';
-
-  String get errorMessage => _errorMessage;
-
-  UnmodifiableListView<CategoryModel> get categories =>
-      UnmodifiableListView(_categories);
-
-  CategoriesViewModel(
-      {required this.fetchCategoryUseCase,
-      required this.createCategoryUseCase});
-
-  void fetchCategories() {
-    fetchCategoryUseCase.fetchCategories().fold(
-      (failure) {
-        _errorMessage = failure.message;
-        notifyListeners();
-      },
-      (success) {
-        print(success);
-        _errorMessage = '';
-        _categories.addAll(success);
-        notifyListeners();
-      },
-    );
-  }
-
-  void createCategory(String category) {
-    createCategoryUseCase.createCategory(category).fold(
-      (failure) {
-        _errorMessage = failure.message;
-        notifyListeners();
-      },
-      (id) => fetchCategories(),
-    );
-  }
-}
-
-class CategoriesController {
+class CategoriesPresenter {
   final _todoStreamController = StreamController<List<CategoryModel>>();
 
   Stream<List<CategoryModel>> get categoryStream =>
@@ -60,12 +58,14 @@ class CategoriesController {
   final CreateCategoryUseCase createCategoryUseCase;
   final CategoryInterface categoryInterface;
 
-  CategoriesController(
+  CategoriesPresenter(
       {required this.createCategoryUseCase,
       required this.fetchCategoryUseCase,
-      required this.categoryInterface});
+      required this.categoryInterface}) {
+    _fetchCategories();
+  }
 
-  void fetchCategories() {
+  void _fetchCategories() {
     fetchCategoryUseCase.fetchCategoriesStream().fold((failure) {
       _todoStreamController.addError(failure.message);
     }, (stream) {
@@ -81,5 +81,9 @@ class CategoriesController {
     }, (id) {
       categoryInterface.onCreateCategorySuccess();
     });
+  }
+
+  void dispose() {
+    _todoStreamController.close();
   }
 }

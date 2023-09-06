@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/di/locator.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/category_controller_provider.dart';
 import 'package:flutter_state_management/src/features/home/ui/presenters/category_interface.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/cateogries_notifier.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,19 +14,19 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> implements CategoryInterface {
   final textController = TextEditingController();
 
+  CategoriesPresenter? _presenter;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      CategoryControllerProvider.of(context)
-          .categoriesNotifier
-          .fetchCategories();
-    });
+    _presenter = CategoriesPresenter(
+        createCategoryUseCase: locator(),
+        fetchCategoryUseCase: locator(),
+        categoryInterface: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = CategoryControllerProvider.of(context).categoriesNotifier;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Home'), centerTitle: true),
@@ -33,21 +34,25 @@ class _HomeViewState extends State<HomeView> implements CategoryInterface {
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
         child: StreamBuilder<List<CategoryModel>>(
-          stream: model.categoryStream,
+          stream: _presenter?.categoryStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final categories = snapshot.data!;
-              return ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = snapshot.data![index];
-                  return ListTile(
-                    title: Text(
-                      category.title,
-                    ),
-                  );
-                },
-              );
+              return categories.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final category = snapshot.data![index];
+                        return ListTile(
+                          title: Text(
+                            category.title,
+                          ),
+                        );
+                      },
+                    )
+                  : const Center(
+                      child: Text('No Categories'),
+                    );
             } else {
               if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
@@ -79,7 +84,7 @@ class _HomeViewState extends State<HomeView> implements CategoryInterface {
                   ),
                   TextButton(
                     onPressed: () {
-                      model.createCategory(textController.text);
+                      _presenter?.createCategory(textController.text);
                       Navigator.pop(context);
                     },
                     child: const Text('Add'),
@@ -111,21 +116,11 @@ class _HomeViewState extends State<HomeView> implements CategoryInterface {
       ),
     );
   }
-}
 
-/**
- *  viewModel.categories.isNotEmpty
-    ? ListView.builder(
-    itemCount: viewModel.categories.length,
-    itemBuilder: (context, index) {
-    final category = viewModel.categories[index];
-    return ListTile(
-    title: Text(
-    category.title,
-    ));
-    },
-    )
-    : const Center(
-    child: Text('No Categories'),
-    ),
- */
+  @override
+  void dispose() {
+    textController.dispose();
+    _presenter?.dispose();
+    super.dispose();
+  }
+}
