@@ -16,7 +16,7 @@ class CreateCategoryUseCase {
     )
         .fold(
       (exception) {
-        debugPrint("Add Category Exception $exception");
+        debugPrint("Add Category $exception");
         return left(
           Failure(message: 'Something went wrong, Please try again'),
         );

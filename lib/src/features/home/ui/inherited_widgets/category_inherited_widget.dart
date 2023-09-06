@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:flutter_state_management/src/features/home/ui/presenters/cateogries_notifier.dart';
+// import 'package:flutter_state_management/src/features/home/ui/presenters/categories_presenter.dart';
 //
 //
 // class CategoryInheritedWidget extends InheritedWidget {

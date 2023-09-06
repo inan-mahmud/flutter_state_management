@@ -3,8 +3,6 @@ import 'package:flutter_state_management/src/core/di/locator.dart';
 import 'package:flutter_state_management/src/core/route/route_manager.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/core/service/database/database_service.dart';
-import 'package:flutter_state_management/todo_notifier.dart';
-import 'package:flutter_state_management/todo_provider.dart';
 
 late DatabaseService databaseService;
 
@@ -26,13 +24,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return TodoProvider(
-      todoNotifier: TodoNotifier(),
-      child: const MaterialApp(
-        title: 'Todo App',
-        onGenerateRoute: RouteManager.generateRoute,
-        initialRoute: Routes.home,
-      ),
+    return MaterialApp(
+      title: 'Todo App',
+      onGenerateRoute: RouteManager().generateRoute,
+      initialRoute: Routes.home,
     );
   }
 }

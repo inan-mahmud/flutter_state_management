@@ -9,15 +9,17 @@ import 'package:flutter_state_management/src/features/tasks/ui/tasks_page.dart';
 import 'package:flutter_state_management/src/features/user_profile/ui/user_profile_page.dart';
 
 class RouteManager {
-  static Route<dynamic> generateRoute(RouteSettings routeSettings) {
+  Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Routes.home:
         // return MaterialPageRoute(
-        //   builder: (_) => CategoryControllerProvider(
-        //     categoriesNotifier: CategoriesController(
+        //   builder: (context) => CategoriesPresenterProvider(
+        //     categoriesPresenter: CategoriesPresenter(
         //       fetchCategoryUseCase: locator(),
         //       createCategoryUseCase: locator(),
-        //      // categoryInterface: ,
+        //       createFailed: (message) =>
+        //           onCategoryCreateFailed(message, context),
+        //       // categoryInterface: ,
         //     ),
         //     child: const HomeView(),
         //   ),
@@ -59,5 +61,11 @@ class RouteManager {
     return MaterialPageRoute(
       builder: (_) => const NotFoundPage(),
     );
+  }
+
+  void onCategoryCreateFailed(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
   }
 }

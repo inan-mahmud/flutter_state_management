@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/core/di/locator.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/category_interface.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/cateogries_notifier.dart';
+import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/category_presenter_provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> implements CategoryInterface {
+class _HomeViewState extends State<HomeView> {
   final textController = TextEditingController();
-
-  CategoriesPresenter? _presenter;
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter = CategoriesPresenter(
-        createCategoryUseCase: locator(),
-        fetchCategoryUseCase: locator(),
-        categoryInterface: this);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final presenter =
+        CategoriesPresenterProvider.of(context).categoriesPresenter;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Home'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Home'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
         child: StreamBuilder<List<CategoryModel>>(
-          stream: _presenter?.categoryStream,
+          stream: presenter.categoryStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final categories = snapshot.data!;
@@ -84,7 +78,7 @@ class _HomeViewState extends State<HomeView> implements CategoryInterface {
                   ),
                   TextButton(
                     onPressed: () {
-                      _presenter?.createCategory(textController.text);
+                      presenter.createCategory(textController.text);
                       Navigator.pop(context);
                     },
                     child: const Text('Add'),
@@ -100,27 +94,9 @@ class _HomeViewState extends State<HomeView> implements CategoryInterface {
   }
 
   @override
-  void onCreateCategoryFailure(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-  @override
-  void onCreateCategorySuccess() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Category Added Successfully'),
-      ),
-    );
-  }
-
-  @override
   void dispose() {
     textController.dispose();
-    _presenter?.dispose();
+    CategoriesPresenterProvider.of(context).categoriesPresenter.dispose();
     super.dispose();
   }
 }
