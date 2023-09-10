@@ -1,58 +1,56 @@
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+sealed class Result<T> {}
 
-sealed class HomeState {}
+class Init<T> extends Result<T> {}
 
-class HomeStateInitial extends HomeState {}
+class Loading<T> extends Result<T> {}
 
-class HomeStateLoading extends HomeState {}
+class Success<T> extends Result<T> {
+  final T data;
 
-class HomeStateSuccess extends HomeState {
-  final List<CategoryModel> categories;
-
-  HomeStateSuccess(this.categories);
+  Success(this.data);
 }
 
-class HomeStateFailure extends HomeState {
+class Error<T> extends Result<T> {
   final String message;
 
-  HomeStateFailure(this.message);
+  Error(this.message);
 }
 
-extension HomeStateExtensions on HomeState {
-  R when<R extends Object?>({
+extension ResultExtensions<T> on Result<T> {
+  R when<R>({
     required R Function() initial,
     required R Function() loading,
-    required R Function(List<CategoryModel> categories) success,
+    required R Function(T data) success,
     required R Function(String message) failure,
   }) {
-    if (this is HomeStateInitial) {
+    if (this is Init<T>) {
       return initial.call();
-    } else if (this is HomeStateLoading) {
+    } else if (this is Loading<T>) {
       return loading.call();
-    } else if (this is HomeStateSuccess) {
-      return success.call((this as HomeStateSuccess).categories);
-    } else if (this is HomeStateFailure) {
-      return failure.call((this as HomeStateFailure).message);
+    } else if (this is Success<T>) {
+      return success.call((this as Success<T>).data);
+    } else if (this is Error<T>) {
+      return failure.call((this as Error<T>).message);
     } else {
-      return initial.call();
+      throw Exception('Unhandled state: $this');
     }
   }
 
-  R? maybeWhen<R extends Object?>({
+  R? maybeWhen<R>({
     R? Function()? initial,
     R? Function()? loading,
-    R? Function(List<CategoryModel> categories)? success,
+    R? Function(T data)? success,
     R? Function(String message)? failure,
     R? Function()? orElse,
   }) {
-    if (this is HomeStateInitial) {
+    if (this is Init<T>) {
       return initial?.call();
-    } else if (this is HomeStateLoading) {
+    } else if (this is Loading<T>) {
       return loading?.call();
-    } else if (this is HomeStateSuccess) {
-      return success?.call((this as HomeStateSuccess).categories);
-    } else if (this is HomeStateFailure) {
-      return failure?.call((this as HomeStateFailure).message);
+    } else if (this is Success<T>) {
+      return success?.call((this as Success<T>).data);
+    } else if (this is Error<T>) {
+      return failure?.call((this as Error<T>).message);
     } else {
       return orElse?.call();
     }
