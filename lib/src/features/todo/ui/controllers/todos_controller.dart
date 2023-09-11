@@ -7,7 +7,8 @@ import 'package:flutter_state_management/src/features/todo/domain/usecase/fetch_
 class TodosController extends ChangeNotifier {
   final _todoStreamController = StreamController<List<TodoModel>>();
 
-  Stream<List<TodoModel>> get todoStream => _todoStreamController.stream;
+  Stream<List<TodoModel>> get todoStream =>
+      _todoStreamController.stream;
 
   final FetchTodosByCategoryUseCase fetchTodosByCategoryUseCase;
 
@@ -22,9 +23,15 @@ class TodosController extends ChangeNotifier {
       },
       (stream) {
         stream.listen((todos) {
-          _todoStreamController.add(todos);
+          _todoStreamController.sink.add(todos);
         });
       },
     );
+  }
+
+  @override
+  void dispose() {
+     _todoStreamController.close();
+    super.dispose();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/add_todo_page.dart';
 import 'package:flutter_state_management/src/core/di/locator.dart';
 import 'package:flutter_state_management/src/core/route/not_found_page.dart';
+import 'package:flutter_state_management/src/core/route/route_arguments.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/auth/sign_in/ui/sign_in_page.dart';
 import 'package:flutter_state_management/src/features/auth/sign_up/ui/sign_up_page.dart';
@@ -27,15 +27,18 @@ class RouteManager {
           settings: routeSettings,
         );
       case Routes.todos:
+        final args = routeSettings.arguments as RouteArguments;
         return MaterialPageRoute(
-          builder: (_) => const TodosView(),
+          builder: (_) => TodosView(
+            args: args,
+          ),
           settings: routeSettings,
         );
-      case Routes.addTodo:
-        return MaterialPageRoute(
-          builder: (_) => AddTodoPage(),
-          settings: routeSettings,
-        );
+      // case Routes.addTodo:
+      //   return MaterialPageRoute(
+      //     builder: (_) => AddTodoPage(),
+      //     settings: routeSettings,
+      //   );
       case Routes.signIn:
         return MaterialPageRoute(
           builder: (_) => const SignInPage(),
