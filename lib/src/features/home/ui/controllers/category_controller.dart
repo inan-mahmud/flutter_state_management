@@ -8,10 +8,10 @@ import 'package:flutter_state_management/src/features/home/ui/state/home_state.d
 
 class CategoryController extends ChangeNotifier {
   ValueNotifier<Result<int>> result = ValueNotifier(Init());
-  final _todoStreamController = StreamController<List<CategoryModel>>();
+  final _categoryStreamController = StreamController<List<CategoryModel>>();
 
   Stream<List<CategoryModel>> get categoryStream =>
-      _todoStreamController.stream;
+      _categoryStreamController.stream;
 
   final FetchCategoryUseCase fetchCategoryUseCase;
   final CreateCategoryUseCase createCategoryUseCase;
@@ -25,10 +25,10 @@ class CategoryController extends ChangeNotifier {
 
   void _fetchCategories() {
     fetchCategoryUseCase.fetchCategoriesStream().fold((failure) {
-      _todoStreamController.addError(failure.message);
+      _categoryStreamController.addError(failure.message);
     }, (stream) {
       stream.listen((categories) {
-        _todoStreamController.add(categories);
+        _categoryStreamController.add(categories);
       });
     });
   }
@@ -44,7 +44,7 @@ class CategoryController extends ChangeNotifier {
 
   @override
   void dispose() {
-    _todoStreamController.close();
+    _categoryStreamController.close();
     super.dispose();
   }
 }

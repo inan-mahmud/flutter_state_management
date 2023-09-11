@@ -2,6 +2,8 @@ import 'package:flutter_state_management/objectbox.g.dart';
 import 'package:flutter_state_management/src/features/home/data/repositories/category_repository.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
+import 'package:flutter_state_management/src/features/todo/data/repositories/todo_repository.dart';
+import 'package:flutter_state_management/src/features/todo/domain/usecase/fetch_todos_by_category_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
@@ -19,9 +21,24 @@ Future<void> setupLocator() async {
       dependsOn: [Store]);
 
   locator.registerFactory<FetchCategoryUseCase>(
-    () => FetchCategoryUseCase(locator()),
+    () => FetchCategoryUseCase(
+      locator(),
+    ),
   );
   locator.registerFactory<CreateCategoryUseCase>(
-    () => CreateCategoryUseCase(locator()),
+    () => CreateCategoryUseCase(
+      locator(),
+    ),
+  );
+
+  locator.registerSingletonWithDependencies(
+    () => TodoRepository(),
+    dependsOn: [Store],
+  );
+
+  locator.registerFactory<FetchTodosByCategoryUseCase>(
+    () => FetchTodosByCategoryUseCase(
+      todoRepository: locator(),
+    ),
   );
 }
