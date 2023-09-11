@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
+import 'package:flutter_state_management/src/core/route/route_arguments.dart';
+import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/categories_provider.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/category_controller.dart';
+import 'package:flutter_state_management/src/features/home/ui/provider/categories_provider.dart';
+import 'package:flutter_state_management/src/features/home/ui/controllers/category_controller.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 
 class HomeView extends StatefulWidget {
@@ -43,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Home'),
         centerTitle: true,
@@ -62,9 +65,22 @@ class _HomeViewState extends State<HomeView> {
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
                         final category = snapshot.data![index];
-                        return ListTile(
-                          title: Text(
-                            category.title,
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.todos,
+                              arguments: RouteArguments(
+                                data: {'id': category.id},
+                              ),
+                            );
+                          },
+                          child: RoundedCorneredContainer(
+                            child: ListTile(
+                              title: Text(
+                                category.title,
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -87,35 +103,38 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: ValueListenableBuilder<Result>(
         valueListenable: _categoryController!.result,
         builder: (context, value, _) {
-          return FloatingActionButton(onPressed: () {
-            showAdaptiveDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                      title: const Text('Add new Category'),
-                      content: TextField(
-                        controller: textController,
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
+          return FloatingActionButton(
+            onPressed: () {
+              showAdaptiveDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        title: const Text('Add new Category'),
+                        content: TextField(
+                          controller: textController,
                         ),
-                        TextButton(
-                          onPressed: () {
-                            _categoryController?.createCategory(
-                              textController.text,
-                            );
-                            textController.clear();
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Create'),
-                        ),
-                      ]);
-                });
-          });
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _categoryController?.createCategory(
+                                textController.text,
+                              );
+                              textController.clear();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Create'),
+                          ),
+                        ]);
+                  });
+            },
+            child: const Icon(Icons.add),
+          );
         },
       ),
     );
@@ -124,8 +143,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     textController.dispose();
-    //CategoriesProvider.of(context).categoriesPresenter.dispose();
     _categoryController?.removeListener(_onStateChange);
+    _categoryController?.dispose();
     super.dispose();
   }
 }
