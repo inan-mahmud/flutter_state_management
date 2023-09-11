@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/categories_provider.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/create_category_notifier.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/category_controller.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 
 class HomeView extends StatefulWidget {
@@ -13,21 +13,21 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final textController = TextEditingController();
-  CreateCategoryNotifier? _createCategoryNotifier;
+
+  CategoryController? _categoryController;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final notifier =
-        CategoriesProvider.of(context).createCategoryNotifier;
-    if (_createCategoryNotifier != notifier) {
-      _createCategoryNotifier = notifier;
-      _createCategoryNotifier?.addListener(_onStateChange);
+    final controller = CategoriesProvider.of(context).categoryController;
+    if (_categoryController != controller) {
+      _categoryController = controller;
+      _categoryController?.addListener(_onStateChange);
     }
   }
 
   void _onStateChange() {
-    _createCategoryNotifier?.value.maybeWhen(failure: (message) {
+    _categoryController?.result.value.maybeWhen(failure: (message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
       ));
@@ -42,9 +42,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final presenter =
-        CategoriesProvider.of(context).categoriesPresenter;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -56,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
         child: StreamBuilder<List<CategoryModel>>(
-          stream: presenter.categoryStream,
+          stream: _categoryController?.categoryStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final categories = snapshot.data!;
@@ -88,13 +85,14 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButton: ValueListenableBuilder<Result>(
-        valueListenable: _createCategoryNotifier!,
+        valueListenable: _categoryController!.result,
         builder: (context, value, _) {
           return FloatingActionButton(onPressed: () {
             showAdaptiveDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                      title: const Text('Add new Category'),
                       content: TextField(
                         controller: textController,
                       ),
@@ -107,7 +105,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         TextButton(
                           onPressed: () {
-                            _createCategoryNotifier?.createCategory(
+                            _categoryController?.createCategory(
                               textController.text,
                             );
                             textController.clear();
@@ -126,8 +124,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     textController.dispose();
-    CategoriesProvider.of(context).categoriesPresenter.dispose();
-    _createCategoryNotifier?.removeListener(_onStateChange);
+    //CategoriesProvider.of(context).categoriesPresenter.dispose();
+    _categoryController?.removeListener(_onStateChange);
     super.dispose();
   }
 }

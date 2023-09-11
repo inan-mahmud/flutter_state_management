@@ -7,7 +7,7 @@ import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 
 class CategoryController extends ChangeNotifier {
-  Result<int> value = Init();
+  ValueNotifier<Result<int>> result = ValueNotifier(Init());
   final _todoStreamController = StreamController<List<CategoryModel>>();
 
   Stream<List<CategoryModel>> get categoryStream =>
@@ -35,9 +35,9 @@ class CategoryController extends ChangeNotifier {
 
   void createCategory(String categoryName) {
     createCategoryUseCase.createCategory(categoryName).fold((failure) {
-      value = Error(failure.message);
+      result.value = Error(failure.message);
     }, (id) {
-      value = Success(id);
+      result.value = Success(id);
     });
     notifyListeners();
   }

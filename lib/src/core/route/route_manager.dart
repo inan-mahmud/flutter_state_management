@@ -6,8 +6,7 @@ import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/auth/sign_in/ui/sign_in_page.dart';
 import 'package:flutter_state_management/src/features/auth/sign_up/ui/sign_up_page.dart';
 import 'package:flutter_state_management/src/features/home/ui/inherited_widgets/categories_provider.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/fetch_categories_controller.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/create_category_notifier.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/category_controller.dart';
 import 'package:flutter_state_management/src/features/home/ui/views/home_view.dart';
 import 'package:flutter_state_management/src/features/tasks/ui/tasks_page.dart';
 import 'package:flutter_state_management/src/features/user_profile/ui/user_profile_page.dart';
@@ -18,11 +17,8 @@ class RouteManager {
       case Routes.home:
         return MaterialPageRoute(
           builder: (context) => CategoriesProvider(
-            categoriesPresenter: FetchCategoriesController(
+            categoryController: CategoryController(
               fetchCategoryUseCase: locator(),
-              // categoryInterface: ,
-            ),
-            createCategoryNotifier: CreateCategoryNotifier(
               createCategoryUseCase: locator(),
             ),
             child: const HomeView(),

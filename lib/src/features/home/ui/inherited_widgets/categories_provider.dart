@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/fetch_categories_controller.dart';
-import 'package:flutter_state_management/src/features/home/ui/presenters/create_category_notifier.dart';
+import 'package:flutter_state_management/src/features/home/ui/presenters/category_controller.dart';
 
 class CategoriesProvider extends InheritedWidget {
-  final FetchCategoriesController categoriesPresenter;
-  final CreateCategoryNotifier createCategoryNotifier;
+  final CategoryController categoryController;
 
   const CategoriesProvider({
     super.key,
     required super.child,
-    required this.categoriesPresenter,
-    required this.createCategoryNotifier,
+    required this.categoryController,
   });
 
   @override
   bool updateShouldNotify(covariant CategoriesProvider oldWidget) {
-    return categoriesPresenter != oldWidget.categoriesPresenter;
+    return categoryController != oldWidget.categoryController;
   }
 
   static CategoriesProvider of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<CategoriesProvider>()!;
+    return context.dependOnInheritedWidgetOfExactType<CategoriesProvider>()!;
   }
 }
