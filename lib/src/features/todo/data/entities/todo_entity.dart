@@ -33,4 +33,5 @@ class TodoEntity {
       DateTime? updatedAt})
       : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
+
 }

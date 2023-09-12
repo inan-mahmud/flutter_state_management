@@ -5,7 +5,6 @@ import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupLocator();
@@ -25,6 +24,7 @@ class _MyAppState extends State<MyApp> {
     return TodoProvider(
       todoController: TodosController(
         fetchTodosByCategoryUseCase: locator(),
+        addTodoByCategoryUseCase: locator(),
       ),
       child: const MaterialApp(
         title: 'Todo App',

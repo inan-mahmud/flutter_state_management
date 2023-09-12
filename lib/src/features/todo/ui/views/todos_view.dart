@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
 import 'package:flutter_state_management/src/core/route/route_arguments.dart';
+import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
+import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
 
 class TodosView extends StatefulWidget {
   final RouteArguments args;
@@ -19,16 +21,31 @@ class TodosView extends StatefulWidget {
 
 class _TodosViewState extends State<TodosView> {
   TodosController? _todosController;
+  Stream<Result<List<TodoModel>>>? todoStream = const Stream.empty();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final controller = TodoProvider.of(context).todoController;
-    if (_todosController != controller) {
+    if (_todosController != controller || _todosController == null) {
       _todosController = controller;
-      // _todosController?.addListener(_onStateChange);
-      _todosController?.fetchTodosByCategory(widget.id ?? 0);
+      todoStream = _todosController?.fetchTodosByCategory(widget.id ?? 0);
+      _todosController?.addListener(_onStateChange);
     }
+  }
+
+  void _onStateChange() {
+    _todosController?.todoResult.maybeWhen(failure: (message) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }, success: (id) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Todo Added'),
+        ),
+      );
+    });
   }
 
   @override
@@ -42,58 +59,58 @@ class _TodosViewState extends State<TodosView> {
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
-        child: StreamBuilder<List<TodoModel>>(
-          stream: _todosController?.todoStream,
+        child: StreamBuilder<Result<List<TodoModel>>>(
+          stream: todoStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final todos = snapshot.data!;
-              return todos.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: todos.length,
-                      itemBuilder: (context, index) {
-                        final todo = snapshot.data![index];
-                        return InkWell(
-                          onTap: () {
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   Routes.todos,
-                            //   arguments: RouteArguments(
-                            //     data: {'id': category.id},
-                            //   ),
-                            // );
+              return snapshot.data!.when(
+                initial: () {
+                  return const SizedBox();
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                success: (List<TodoModel> data) {
+                  return data.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return RoundedCorneredContainer(
+                              child: Text(data[index].title),
+                            );
                           },
-                          child: RoundedCorneredContainer(
-                            child: ListTile(
-                              title: Text(
-                                todo.title,
-                              ),
-                            ),
-                          ),
+                        )
+                      : const Center(
+                          child: Text('No todos'),
                         );
-                      },
-                    )
-                  : const Center(
-                      child: Text('No Todos available'),
-                    );
+                },
+                failure: (String message) {
+                  return Center(
+                    child: Text(message),
+                  );
+                },
+              );
             } else {
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => const AddTodoView(),
+            enableDrag: true,
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    // _todosController?.removeListener(_onStateChange);
-    _todosController?.dispose();
-    super.dispose();
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_state_management/src/features/home/data/repositories/cat
 import 'package:flutter_state_management/src/features/home/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/home/domain/usecase/fetch_category_usecase.dart';
 import 'package:flutter_state_management/src/features/todo/data/repositories/todo_repository.dart';
+import 'package:flutter_state_management/src/features/todo/domain/usecase/add_todo_by_category_usecase.dart';
 import 'package:flutter_state_management/src/features/todo/domain/usecase/fetch_todos_by_category_usecase.dart';
 import 'package:get_it/get_it.dart';
 
@@ -38,6 +39,11 @@ Future<void> setupLocator() async {
 
   locator.registerFactory<FetchTodosByCategoryUseCase>(
     () => FetchTodosByCategoryUseCase(
+      todoRepository: locator(),
+    ),
+  );
+  locator.registerFactory<AddTodoByCategoryUseCase>(
+    () => AddTodoByCategoryUseCase(
       todoRepository: locator(),
     ),
   );
