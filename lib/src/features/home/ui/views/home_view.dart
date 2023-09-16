@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
-import 'package:flutter_state_management/src/core/route/route_arguments.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/provider/categories_provider.dart';
 import 'package:flutter_state_management/src/features/home/ui/controllers/category_controller.dart';
+import 'package:flutter_state_management/src/features/home/ui/provider/categories_provider.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 
 class HomeView extends StatefulWidget {
@@ -70,9 +69,7 @@ class _HomeViewState extends State<HomeView> {
                             Navigator.pushNamed(
                               context,
                               Routes.todos,
-                              arguments: RouteArguments(
-                                data: {'id': category.id},
-                              ),
+                              arguments: category,
                             );
                           },
                           child: RoundedCorneredContainer(

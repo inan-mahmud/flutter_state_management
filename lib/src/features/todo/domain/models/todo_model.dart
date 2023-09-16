@@ -12,4 +12,5 @@ class TodoModel {
     required this.isDone,
     required this.isImportant,
   });
+
 }

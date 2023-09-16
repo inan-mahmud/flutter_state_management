@@ -18,12 +18,7 @@ class FetchTodosByCategoryUseCase {
           ),
           (todosStream) => right(
             todosStream.map(
-              (todos) {
-                return todos.map((todo) {
-                  print(todo.title);
-                  return todo.toModel();
-                }).toList();
-              },
+              (todos) => todos.map((todo) => todo.toModel()).toList(),
             ),
           ),
         );

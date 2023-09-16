@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
-import 'package:flutter_state_management/src/core/route/route_arguments.dart';
+import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
@@ -8,12 +8,7 @@ import 'package:flutter_state_management/src/features/todo/ui/provider/todo_prov
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
 
 class TodosView extends StatefulWidget {
-  final RouteArguments args;
-  int? id;
-
-  TodosView({super.key, required this.args}) {
-    id = args.data?['id'];
-  }
+  const TodosView({super.key});
 
   @override
   State<TodosView> createState() => _TodosViewState();
@@ -26,26 +21,39 @@ class _TodosViewState extends State<TodosView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    _initController();
+  }
+
+  void _initController() {
     final controller = TodoProvider.of(context).todoController;
     if (_todosController != controller || _todosController == null) {
       _todosController = controller;
-      todoStream = _todosController?.fetchTodosByCategory(widget.id ?? 0);
-      _todosController?.addListener(_onStateChange);
+      _fetchTodoAndListenToChange();
     }
   }
 
+  void _fetchTodoAndListenToChange() {
+    final categoryModel =
+        ModalRoute.of(context)!.settings.arguments as CategoryModel;
+    todoStream = _todosController?.fetchTodosByCategory(categoryModel);
+    _todosController?.addListener(_onStateChange);
+  }
+
   void _onStateChange() {
-    _todosController?.todoResult.maybeWhen(failure: (message) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-      ));
-    }, success: (id) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Todo Added'),
-        ),
-      );
-    });
+    if (mounted) {
+      _todosController?.todoResult.maybeWhen(failure: (message) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      }, success: (id) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Todo Added'),
+          ),
+        );
+      });
+    }
   }
 
   @override

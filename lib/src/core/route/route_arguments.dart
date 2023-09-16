@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class RouteArguments {
-  final Map<String, dynamic>? data;
+class RouteArguments<T> {
+  T data;
 
-  const RouteArguments({this.data});
+  RouteArguments({required this.data});
 }
