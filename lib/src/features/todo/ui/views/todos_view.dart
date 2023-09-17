@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/home/ui/provider/category_model_provider.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
