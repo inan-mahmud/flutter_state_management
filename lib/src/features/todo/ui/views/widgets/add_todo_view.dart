@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 
 class AddTodoView extends StatefulWidget {
@@ -15,6 +16,7 @@ class _AddTodoViewState extends State<AddTodoView> {
   @override
   Widget build(BuildContext context) {
     final todoController = TodoProvider.of(context).todoController;
+    final categoryModel = CategoryModelProvider.of(context).categoryModel;
 
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
@@ -48,6 +50,7 @@ class _AddTodoViewState extends State<AddTodoView> {
           ElevatedButton(
             onPressed: () {
               todoController.addTodo(
+                categoryModel,
                 todoTitleController.text,
                 todoDescriptionController.text,
               );

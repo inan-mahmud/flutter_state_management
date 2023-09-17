@@ -20,14 +20,8 @@ class TodosController extends ChangeNotifier {
     required this.addTodoByCategoryUseCase,
   });
 
-  late CategoryModel categoryModel;
-
-  Stream<Result<List<TodoModel>>> fetchTodosByCategory(
-      CategoryModel categoryModel) async* {
-    this.categoryModel = categoryModel;
-    yield* fetchTodosByCategoryUseCase
-        .fetchTodosStreamByCategory(categoryModel.id!)
-        .fold(
+  Stream<Result<List<TodoModel>>> fetchTodosByCategory(int id) async* {
+    yield* fetchTodosByCategoryUseCase.fetchTodosStreamByCategory(id).fold(
       (failure) async* {
         yield Error(failure.message);
       },
@@ -37,9 +31,9 @@ class TodosController extends ChangeNotifier {
     );
   }
 
-  void addTodo(String title, String description) {
-    final result = addTodoByCategoryUseCase.addTodoByCategory(
-        categoryModel, title, description);
+  void addTodo(CategoryModel model, String title, String description) {
+    final result =
+        addTodoByCategoryUseCase.addTodoByCategory(model, title, description);
     result.fold((failure) {
       todoResult = Error(failure.message);
       notifyListeners();

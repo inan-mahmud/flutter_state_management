@@ -16,7 +16,8 @@ class TodosView extends StatefulWidget {
 
 class _TodosViewState extends State<TodosView> {
   TodosController? _todosController;
-  Stream<Result<List<TodoModel>>>? todoStream = const Stream.empty();
+  Stream<Result<List<TodoModel>>>? todoStream;
+  late CategoryModel _categoryModel;
 
   @override
   void didChangeDependencies() {
@@ -34,9 +35,9 @@ class _TodosViewState extends State<TodosView> {
   }
 
   void _fetchTodoAndListenToChange() {
-    final categoryModel =
+    _categoryModel =
         ModalRoute.of(context)!.settings.arguments as CategoryModel;
-    todoStream = _todosController?.fetchTodosByCategory(categoryModel);
+    todoStream = _todosController?.fetchTodosByCategory(_categoryModel.id!);
     _todosController?.addListener(_onStateChange);
   }
 
@@ -86,8 +87,10 @@ class _TodosViewState extends State<TodosView> {
                           itemCount: data.length,
                           itemBuilder: (context, index) {
                             return RoundedCorneredContainer(
-                              child: Text(data[index].title),
-                            );
+                                child: ListTile(
+                                    title: Text(
+                              data[index].title,
+                            )));
                           },
                         )
                       : const Center(
@@ -113,7 +116,10 @@ class _TodosViewState extends State<TodosView> {
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,
-            builder: (context) => const AddTodoView(),
+            builder: (context) => CategoryModelProvider(
+              categoryModel: _categoryModel,
+              child: const AddTodoView(),
+            ),
             enableDrag: true,
           );
         },
