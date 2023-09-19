@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
       todoController: TodosController(
         fetchTodosByCategoryUseCase: locator(),
         addTodoByCategoryUseCase: locator(),
+        updateTodoUseCase: locator(),
       ),
       child: const MaterialApp(
         title: 'Todo App',

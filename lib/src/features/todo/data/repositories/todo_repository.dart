@@ -42,4 +42,13 @@ class TodoRepository {
       return left(exception);
     }
   }
+
+  Either<Exception, int> updateTodo(TodoEntity todoEntity) {
+    try {
+      final id = _todoBox.put(todoEntity, mode: PutMode.update);
+      return right(id);
+    } on Exception catch (exception) {
+      return left(exception);
+    }
+  }
 }

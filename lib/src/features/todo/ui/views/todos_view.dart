@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/ui/provider/category_model_provider.dart';
 import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
+import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
+import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_item_view.dart';
 
 class TodosView extends StatefulWidget {
   const TodosView({super.key});
@@ -23,7 +24,6 @@ class _TodosViewState extends State<TodosView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _initController();
   }
 
@@ -39,10 +39,11 @@ class _TodosViewState extends State<TodosView> {
     _categoryModel =
         ModalRoute.of(context)!.settings.arguments as CategoryModel;
     todoStream = _todosController?.fetchTodosByCategory(_categoryModel.id!);
-    _todosController?.addListener(_onStateChange);
+    _todosController?.addListener(_onFetchTodoStateChange);
+    _todosController?.addListener(_onUpdateTodoStateChange);
   }
 
-  void _onStateChange() {
+  void _onFetchTodoStateChange() {
     if (mounted) {
       _todosController?.todoResult.maybeWhen(failure: (message) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -52,6 +53,22 @@ class _TodosViewState extends State<TodosView> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Todo Added'),
+          ),
+        );
+      });
+    }
+  }
+
+  void _onUpdateTodoStateChange() {
+    if (mounted) {
+      _todosController?.updateTodoResult.maybeWhen(failure: (message) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      }, success: (id) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Todo Updated'),
           ),
         );
       });
@@ -87,11 +104,10 @@ class _TodosViewState extends State<TodosView> {
                       ? ListView.builder(
                           itemCount: data.length,
                           itemBuilder: (context, index) {
-                            return RoundedCorneredContainer(
-                                child: ListTile(
-                                    title: Text(
-                              data[index].title,
-                            )));
+                            return TodoModelProvider(
+                              todoModel: data[index],
+                              child: const TodoItemView(),
+                            );
                           },
                         )
                       : const Center(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/core/rounded_cornered_container.dart';
+import 'package:flutter_state_management/src/core/common/rounded_cornered_container.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/home/ui/controllers/category_controller.dart';
