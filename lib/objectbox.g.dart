@@ -14,51 +14,13 @@ import 'package:objectbox/internal.dart'; // generated code can access "internal
 import 'package:objectbox/objectbox.dart';
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'src/features/home/data/entities/category_entity.dart';
+import 'src/features/category/data/entities/category_entity.dart';
 import 'src/features/todo/data/entities/todo_entity.dart';
 import 'src/features/user_profile/data/entity/user_entity.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <ModelEntity>[
-  ModelEntity(
-      id: const IdUid(1, 6848051843973750637),
-      name: 'CategoryEntity',
-      lastPropertyId: const IdUid(5, 2855717816864190171),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 8851284691176375205),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 4332862999620941104),
-            name: 'title',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 4951578403033103094),
-            name: 'userId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(1, 1609956993769315913),
-            relationTarget: 'UserEntity'),
-        ModelProperty(
-            id: const IdUid(4, 2231288387448193202),
-            name: 'createdAt',
-            type: 10,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 2855717816864190171),
-            name: 'updatedAt',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[
-        ModelBacklink(name: 'todos', srcEntity: 'TodoEntity', srcField: '')
-      ]),
   ModelEntity(
       id: const IdUid(2, 8674029403964626081),
       name: 'TodoEntity',
@@ -140,9 +102,36 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(4, 2252642345862652331),
+      name: 'CategoryEntity',
+      lastPropertyId: const IdUid(4, 9016581816699761833),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 4601470096277319050),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 2229781017313870958),
+            name: 'title',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 2915539458317071263),
+            name: 'createdAt',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 9016581816699761833),
+            name: 'updatedAt',
+            type: 10,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[
-        ModelBacklink(
-            name: 'categories', srcEntity: 'CategoryEntity', srcField: ''),
         ModelBacklink(name: 'todos', srcEntity: 'TodoEntity', srcField: '')
       ])
 ];
@@ -174,69 +163,27 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(3, 1041259315090196693),
+      lastEntityId: const IdUid(4, 2252642345862652331),
       lastIndexId: const IdUid(3, 1458294110807907963),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [6848051843973750637],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [
+        8851284691176375205,
+        4332862999620941104,
+        4951578403033103094,
+        2231288387448193202,
+        2855717816864190171
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, EntityDefinition>{
-    CategoryEntity: EntityDefinition<CategoryEntity>(
-        model: _entities[0],
-        toOneRelations: (CategoryEntity object) => [object.user],
-        toManyRelations: (CategoryEntity object) => {
-              RelInfo<TodoEntity>.toOneBacklink(6, object.id,
-                  (TodoEntity srcObject) => srcObject.category): object.todos
-            },
-        getId: (CategoryEntity object) => object.id,
-        setId: (CategoryEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (CategoryEntity object, fb.Builder fbb) {
-          final titleOffset = fbb.writeString(object.title);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, titleOffset);
-          fbb.addInt64(2, object.user.targetId);
-          fbb.addInt64(3, object.createdAt.millisecondsSinceEpoch);
-          fbb.addInt64(4, object.updatedAt.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final titleParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
-          final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
-          final object = CategoryEntity(
-              id: idParam,
-              title: titleParam,
-              createdAt: createdAtParam,
-              updatedAt: updatedAtParam);
-          object.user.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.user.attach(store);
-          InternalToManyAccess.setRelInfo<CategoryEntity>(
-              object.todos,
-              store,
-              RelInfo<TodoEntity>.toOneBacklink(
-                  6, object.id, (TodoEntity srcObject) => srcObject.category));
-          return object;
-        }),
     TodoEntity: EntityDefinition<TodoEntity>(
-        model: _entities[1],
+        model: _entities[0],
         toOneRelations: (TodoEntity object) => [object.category, object.user],
         toManyRelations: (TodoEntity object) => {},
         getId: (TodoEntity object) => object.id,
@@ -294,16 +241,9 @@ ModelDefinition getObjectBoxModel() {
           return object;
         }),
     UserEntity: EntityDefinition<UserEntity>(
-        model: _entities[2],
+        model: _entities[1],
         toOneRelations: (UserEntity object) => [],
-        toManyRelations: (UserEntity object) => {
-              RelInfo<CategoryEntity>.toOneBacklink(3, object.id,
-                      (CategoryEntity srcObject) => srcObject.user):
-                  object.categories,
-              RelInfo<TodoEntity>.toOneBacklink(
-                      7, object.id, (TodoEntity srcObject) => srcObject.user):
-                  object.todos
-            },
+        toManyRelations: (UserEntity object) => {},
         getId: (UserEntity object) => object.id,
         setId: (UserEntity object, int id) {
           object.id = id;
@@ -329,16 +269,51 @@ ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 8, '');
           final object = UserEntity(
               id: idParam, userName: userNameParam, email: emailParam);
-          InternalToManyAccess.setRelInfo<UserEntity>(
-              object.categories,
-              store,
-              RelInfo<CategoryEntity>.toOneBacklink(
-                  3, object.id, (CategoryEntity srcObject) => srcObject.user));
-          InternalToManyAccess.setRelInfo<UserEntity>(
+
+          return object;
+        }),
+    CategoryEntity: EntityDefinition<CategoryEntity>(
+        model: _entities[2],
+        toOneRelations: (CategoryEntity object) => [],
+        toManyRelations: (CategoryEntity object) => {
+              RelInfo<TodoEntity>.toOneBacklink(6, object.id,
+                  (TodoEntity srcObject) => srcObject.category): object.todos
+            },
+        getId: (CategoryEntity object) => object.id,
+        setId: (CategoryEntity object, int id) {
+          object.id = id;
+        },
+        objectToFB: (CategoryEntity object, fb.Builder fbb) {
+          final titleOffset = fbb.writeString(object.title);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, titleOffset);
+          fbb.addInt64(2, object.createdAt.millisecondsSinceEpoch);
+          fbb.addInt64(3, object.updatedAt.millisecondsSinceEpoch);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final titleParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
+          final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
+          final object = CategoryEntity(
+              id: idParam,
+              title: titleParam,
+              createdAt: createdAtParam,
+              updatedAt: updatedAtParam);
+          InternalToManyAccess.setRelInfo<CategoryEntity>(
               object.todos,
               store,
               RelInfo<TodoEntity>.toOneBacklink(
-                  7, object.id, (TodoEntity srcObject) => srcObject.user));
+                  6, object.id, (TodoEntity srcObject) => srcObject.category));
           return object;
         })
   };
@@ -346,79 +321,75 @@ ModelDefinition getObjectBoxModel() {
   return ModelDefinition(model, bindings);
 }
 
-/// [CategoryEntity] entity fields to define ObjectBox queries.
-class CategoryEntity_ {
-  /// see [CategoryEntity.id]
-  static final id =
-      QueryIntegerProperty<CategoryEntity>(_entities[0].properties[0]);
-
-  /// see [CategoryEntity.title]
-  static final title =
-      QueryStringProperty<CategoryEntity>(_entities[0].properties[1]);
-
-  /// see [CategoryEntity.user]
-  static final user = QueryRelationToOne<CategoryEntity, UserEntity>(
-      _entities[0].properties[2]);
-
-  /// see [CategoryEntity.createdAt]
-  static final createdAt =
-      QueryIntegerProperty<CategoryEntity>(_entities[0].properties[3]);
-
-  /// see [CategoryEntity.updatedAt]
-  static final updatedAt =
-      QueryIntegerProperty<CategoryEntity>(_entities[0].properties[4]);
-}
-
 /// [TodoEntity] entity fields to define ObjectBox queries.
 class TodoEntity_ {
   /// see [TodoEntity.id]
   static final id =
-      QueryIntegerProperty<TodoEntity>(_entities[1].properties[0]);
+      QueryIntegerProperty<TodoEntity>(_entities[0].properties[0]);
 
   /// see [TodoEntity.title]
   static final title =
-      QueryStringProperty<TodoEntity>(_entities[1].properties[1]);
+      QueryStringProperty<TodoEntity>(_entities[0].properties[1]);
 
   /// see [TodoEntity.description]
   static final description =
-      QueryStringProperty<TodoEntity>(_entities[1].properties[2]);
+      QueryStringProperty<TodoEntity>(_entities[0].properties[2]);
 
   /// see [TodoEntity.isDone]
   static final isDone =
-      QueryBooleanProperty<TodoEntity>(_entities[1].properties[3]);
+      QueryBooleanProperty<TodoEntity>(_entities[0].properties[3]);
 
   /// see [TodoEntity.isImportant]
   static final isImportant =
-      QueryBooleanProperty<TodoEntity>(_entities[1].properties[4]);
+      QueryBooleanProperty<TodoEntity>(_entities[0].properties[4]);
 
   /// see [TodoEntity.category]
   static final category = QueryRelationToOne<TodoEntity, CategoryEntity>(
-      _entities[1].properties[5]);
+      _entities[0].properties[5]);
 
   /// see [TodoEntity.user]
   static final user =
-      QueryRelationToOne<TodoEntity, UserEntity>(_entities[1].properties[6]);
+      QueryRelationToOne<TodoEntity, UserEntity>(_entities[0].properties[6]);
 
   /// see [TodoEntity.createdAt]
   static final createdAt =
-      QueryIntegerProperty<TodoEntity>(_entities[1].properties[7]);
+      QueryIntegerProperty<TodoEntity>(_entities[0].properties[7]);
 
   /// see [TodoEntity.updatedAt]
   static final updatedAt =
-      QueryIntegerProperty<TodoEntity>(_entities[1].properties[8]);
+      QueryIntegerProperty<TodoEntity>(_entities[0].properties[8]);
 }
 
 /// [UserEntity] entity fields to define ObjectBox queries.
 class UserEntity_ {
   /// see [UserEntity.id]
   static final id =
-      QueryIntegerProperty<UserEntity>(_entities[2].properties[0]);
+      QueryIntegerProperty<UserEntity>(_entities[1].properties[0]);
 
   /// see [UserEntity.userName]
   static final userName =
-      QueryStringProperty<UserEntity>(_entities[2].properties[1]);
+      QueryStringProperty<UserEntity>(_entities[1].properties[1]);
 
   /// see [UserEntity.email]
   static final email =
-      QueryStringProperty<UserEntity>(_entities[2].properties[2]);
+      QueryStringProperty<UserEntity>(_entities[1].properties[2]);
+}
+
+/// [CategoryEntity] entity fields to define ObjectBox queries.
+class CategoryEntity_ {
+  /// see [CategoryEntity.id]
+  static final id =
+      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[0]);
+
+  /// see [CategoryEntity.title]
+  static final title =
+      QueryStringProperty<CategoryEntity>(_entities[2].properties[1]);
+
+  /// see [CategoryEntity.createdAt]
+  static final createdAt =
+      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[2]);
+
+  /// see [CategoryEntity.updatedAt]
+  static final updatedAt =
+      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[3]);
 }

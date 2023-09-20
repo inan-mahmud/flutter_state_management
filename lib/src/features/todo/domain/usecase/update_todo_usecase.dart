@@ -1,16 +1,21 @@
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
-import 'package:flutter_state_management/src/features/todo/data/repositories/todo_repository.dart';
+import 'package:flutter_state_management/src/features/category/domain/mappers/category_mapper.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/todo/domain/mapper/todo_mapper.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
+import 'package:flutter_state_management/src/features/todo/domain/repositories/i_todo_repository.dart';
 
 class UpdateTodoUseCase {
-  final TodoRepository todoRepository;
+  final ITodoRepository todoRepository;
 
   UpdateTodoUseCase({required this.todoRepository});
 
-  Either<Failure, int> updateTodo(TodoModel todoModel) {
+  Either<Failure, int> updateTodo(
+      CategoryModel categoryModel, TodoModel todoModel) {
     final todoEntity = todoModel.toEntity();
+    final categoryEntity = categoryModel.toEntity();
+    todoEntity.category.target = categoryEntity;
     final result = todoRepository.updateTodo(todoEntity);
     return result.fold(
       (exception) => Left(

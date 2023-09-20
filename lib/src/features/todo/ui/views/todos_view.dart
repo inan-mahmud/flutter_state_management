@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/provider/category_model_provider.dart';
-import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
+import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
@@ -39,24 +39,7 @@ class _TodosViewState extends State<TodosView> {
     _categoryModel =
         ModalRoute.of(context)!.settings.arguments as CategoryModel;
     todoStream = _todosController?.fetchTodosByCategory(_categoryModel.id!);
-    _todosController?.addListener(_onFetchTodoStateChange);
     _todosController?.addListener(_onUpdateTodoStateChange);
-  }
-
-  void _onFetchTodoStateChange() {
-    if (mounted) {
-      _todosController?.todoResult.maybeWhen(failure: (message) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
-      }, success: (id) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Todo Added'),
-          ),
-        );
-      });
-    }
   }
 
   void _onUpdateTodoStateChange() {
@@ -69,6 +52,9 @@ class _TodosViewState extends State<TodosView> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Todo Updated'),
+            duration: Duration(
+              milliseconds: 500,
+            ),
           ),
         );
       });
@@ -104,9 +90,12 @@ class _TodosViewState extends State<TodosView> {
                       ? ListView.builder(
                           itemCount: data.length,
                           itemBuilder: (context, index) {
-                            return TodoModelProvider(
-                              todoModel: data[index],
-                              child: const TodoItemView(),
+                            return CategoryModelProvider(
+                              categoryModel: _categoryModel,
+                              child: TodoModelProvider(
+                                todoModel: data[index],
+                                child: const TodoItemView(),
+                              ),
                             );
                           },
                         )

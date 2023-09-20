@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/common/rounded_cornered_container.dart';
+import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 
@@ -14,6 +15,7 @@ class _TodoItemViewState extends State<TodoItemView> {
   @override
   Widget build(BuildContext context) {
     final todoModel = TodoModelProvider.of(context).todoModel;
+    final categoryModel = CategoryModelProvider.of(context).categoryModel;
 
     var isImportant = todoModel.isImportant;
 
@@ -25,7 +27,9 @@ class _TodoItemViewState extends State<TodoItemView> {
           value: todoModel.isDone,
           onChanged: (value) {
             final model = todoModel.copyWith(isDone: value);
-            TodoProvider.of(context).todoController.updateTodo(model);
+            TodoProvider.of(context)
+                .todoController
+                .updateTodo(categoryModel, model);
           },
         ),
         leading: IconButton(
@@ -38,7 +42,9 @@ class _TodoItemViewState extends State<TodoItemView> {
             });
             final model =
                 todoModel.copyWith(isImportant: !todoModel.isImportant);
-            TodoProvider.of(context).todoController.updateTodo(model);
+            TodoProvider.of(context)
+                .todoController
+                .updateTodo(categoryModel, model);
           },
         ),
       ),

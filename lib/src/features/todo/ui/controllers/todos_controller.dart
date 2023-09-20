@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/home/ui/state/home_state.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/domain/usecase/add_todo_by_category_usecase.dart';
 import 'package:flutter_state_management/src/features/todo/domain/usecase/fetch_todos_by_category_usecase.dart';
@@ -15,8 +15,6 @@ class TodosController extends ChangeNotifier {
 
   Result<int> todoResult = Init();
   Result<int> updateTodoResult = Init();
-
-  ValueNotifier<Result<List<TodoModel>>> todos = ValueNotifier(Init());
 
   TodosController({
     required this.fetchTodosByCategoryUseCase,
@@ -47,8 +45,8 @@ class TodosController extends ChangeNotifier {
     });
   }
 
-  void updateTodo(TodoModel todoModel) {
-    final result = updateTodoUseCase.updateTodo(todoModel);
+  void updateTodo(CategoryModel categoryModel,TodoModel todoModel) {
+    final result = updateTodoUseCase.updateTodo(categoryModel,todoModel);
 
     result.fold((failure) {
       updateTodoResult = Error(failure.message);

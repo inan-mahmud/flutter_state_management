@@ -1,9 +1,10 @@
 import 'package:flutter_state_management/objectbox.g.dart';
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/di/locator.dart';
-import 'package:flutter_state_management/src/features/home/data/entities/category_entity.dart';
+import 'package:flutter_state_management/src/features/category/data/entities/category_entity.dart';
+import 'package:flutter_state_management/src/features/category/domain/repositories/i_category_repository.dart';
 
-class CategoryRepository {
+class CategoryRepository implements ICategoryRepository {
   final Store store = locator<Store>();
 
   late final Box<CategoryEntity> _categoryBox;
@@ -12,6 +13,7 @@ class CategoryRepository {
     _categoryBox = Box<CategoryEntity>(store);
   }
 
+  @override
   Either<Exception, int> createCategory(CategoryEntity category) {
     try {
       final id = _categoryBox.put(category);
@@ -21,6 +23,7 @@ class CategoryRepository {
     }
   }
 
+  @override
   Either<Exception, List<CategoryEntity>> fetchCategories() {
     try {
       final categories = _categoryBox.getAll();
@@ -30,6 +33,7 @@ class CategoryRepository {
     }
   }
 
+  @override
   Either<Exception, Stream<List<CategoryEntity>>> fetchCategoriesStream() {
     try {
       final categories = _categoryBox

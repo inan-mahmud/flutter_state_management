@@ -1,4 +1,4 @@
-import 'package:flutter_state_management/src/features/home/data/entities/category_entity.dart';
+import 'package:flutter_state_management/src/features/category/data/entities/category_entity.dart';
 import 'package:flutter_state_management/src/features/user_profile/data/entity/user_entity.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -34,4 +34,8 @@ class TodoEntity {
       : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
+  @override
+  String toString() {
+    return 'TodoEntity(id: $id, title: $title, description: $description, isDone: $isDone, isImportant: $isImportant, createdAt: $createdAt, updatedAt: $updatedAt, category: ${category.target?.title}, user: $user)';
+  }
 }

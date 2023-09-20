@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 
 class CategoryModelProvider extends InheritedWidget {
   final CategoryModel categoryModel;

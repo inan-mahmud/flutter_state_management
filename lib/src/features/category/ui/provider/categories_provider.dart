@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/home/ui/controllers/category_controller.dart';
+import 'package:flutter_state_management/src/features/category/ui/controllers/category_controller.dart';
 
 class CategoriesProvider extends InheritedWidget {
   final CategoryController categoryController;

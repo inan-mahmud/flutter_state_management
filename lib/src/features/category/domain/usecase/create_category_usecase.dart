@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
-import 'package:flutter_state_management/src/features/home/data/entities/category_entity.dart';
-import 'package:flutter_state_management/src/features/home/data/repositories/category_repository.dart';
+import 'package:flutter_state_management/src/features/category/data/entities/category_entity.dart';
+import 'package:flutter_state_management/src/features/category/domain/repositories/i_category_repository.dart';
 
 class CreateCategoryUseCase {
-  final CategoryRepository categoryRepository;
+  final ICategoryRepository categoryRepository;
 
   const CreateCategoryUseCase(this.categoryRepository);
 

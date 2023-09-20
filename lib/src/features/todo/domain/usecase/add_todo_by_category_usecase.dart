@@ -1,12 +1,12 @@
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
-import 'package:flutter_state_management/src/features/home/domain/mappers/category_mapper.dart';
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/domain/mappers/category_mapper.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
-import 'package:flutter_state_management/src/features/todo/data/repositories/todo_repository.dart';
+import 'package:flutter_state_management/src/features/todo/domain/repositories/i_todo_repository.dart';
 
 class AddTodoByCategoryUseCase {
-  final TodoRepository todoRepository;
+  final ITodoRepository todoRepository;
 
   AddTodoByCategoryUseCase({required this.todoRepository});
 

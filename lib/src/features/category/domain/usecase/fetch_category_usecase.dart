@@ -1,11 +1,11 @@
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
-import 'package:flutter_state_management/src/features/home/data/repositories/category_repository.dart';
-import 'package:flutter_state_management/src/features/home/domain/mappers/category_mapper.dart';
-import 'package:flutter_state_management/src/features/home/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/domain/mappers/category_mapper.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
+import 'package:flutter_state_management/src/features/category/domain/repositories/i_category_repository.dart';
 
 class FetchCategoryUseCase {
-  final CategoryRepository categoryRepository;
+  final ICategoryRepository categoryRepository;
 
   FetchCategoryUseCase(this.categoryRepository);
 

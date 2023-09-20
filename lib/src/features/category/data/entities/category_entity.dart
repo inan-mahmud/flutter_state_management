@@ -16,8 +16,6 @@ class CategoryEntity {
   @Backlink()
   final todos = ToMany<TodoEntity>();
 
-  @Backlink()
-  final user = ToOne<UserEntity>();
 
   CategoryEntity(
       {this.id = 0,
@@ -26,4 +24,5 @@ class CategoryEntity {
       DateTime? updatedAt})
       : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
+
 }
