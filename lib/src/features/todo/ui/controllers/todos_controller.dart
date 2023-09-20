@@ -28,7 +28,11 @@ class TodosController extends ChangeNotifier {
         yield Error(failure.message);
       },
       (stream) async* {
-        yield* stream.map((todos) => Success(todos));
+        yield* stream.map(
+          (todos) => Success(
+            todos,
+          ),
+        );
       },
     );
   }
@@ -45,8 +49,8 @@ class TodosController extends ChangeNotifier {
     });
   }
 
-  void updateTodo(CategoryModel categoryModel,TodoModel todoModel) {
-    final result = updateTodoUseCase.updateTodo(categoryModel,todoModel);
+  void updateTodo(CategoryModel categoryModel, TodoModel todoModel) {
+    final result = updateTodoUseCase.updateTodo(categoryModel, todoModel);
 
     result.fold((failure) {
       updateTodoResult = Error(failure.message);

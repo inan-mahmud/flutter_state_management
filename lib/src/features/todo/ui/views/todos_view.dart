@@ -4,10 +4,12 @@ import 'package:flutter_state_management/src/features/category/ui/provider/categ
 import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
+import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_item_view.dart';
+import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_list_view.dart';
 
 class TodosView extends StatefulWidget {
   const TodosView({super.key});
@@ -18,7 +20,7 @@ class TodosView extends StatefulWidget {
 
 class _TodosViewState extends State<TodosView> {
   TodosController? _todosController;
-  Stream<Result<List<TodoModel>>>? todoStream;
+  Stream<Result<List<TodoModel>>>? _todoStream;
   late CategoryModel _categoryModel;
 
   @override
@@ -38,7 +40,7 @@ class _TodosViewState extends State<TodosView> {
   void _fetchTodoAndListenToChange() {
     _categoryModel =
         ModalRoute.of(context)!.settings.arguments as CategoryModel;
-    todoStream = _todosController?.fetchTodosByCategory(_categoryModel.id!);
+    _todoStream = _todosController?.fetchTodosByCategory(_categoryModel.id!);
     _todosController?.addListener(_onUpdateTodoStateChange);
   }
 
@@ -73,7 +75,7 @@ class _TodosViewState extends State<TodosView> {
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
         child: StreamBuilder<Result<List<TodoModel>>>(
-          stream: todoStream,
+          stream: _todoStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return snapshot.data!.when(
@@ -87,17 +89,12 @@ class _TodosViewState extends State<TodosView> {
                 },
                 success: (List<TodoModel> data) {
                   return data.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return CategoryModelProvider(
-                              categoryModel: _categoryModel,
-                              child: TodoModelProvider(
-                                todoModel: data[index],
-                                child: const TodoItemView(),
-                              ),
-                            );
-                          },
+                      ? CategoryModelProvider(
+                          categoryModel: _categoryModel,
+                          child: TodoListProvider(
+                            todoList: data,
+                            child: const TodoListView(),
+                          ),
                         )
                       : const Center(
                           child: Text('No todos'),
