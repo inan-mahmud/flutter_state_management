@@ -3,8 +3,15 @@ import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_item_view.dart';
 
-class TodoListView extends StatelessWidget {
+class TodoListView extends StatefulWidget {
   const TodoListView({super.key});
+
+  @override
+  State<TodoListView> createState() => _TodoListViewState();
+}
+
+class _TodoListViewState extends State<TodoListView> {
+  final _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +19,7 @@ class TodoListView extends StatelessWidget {
     final completedTodos = todoList.where((element) => element.isDone).toList();
     final inCompletedTodos =
         todoList.where((element) => !element.isDone).toList();
+
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
