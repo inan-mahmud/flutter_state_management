@@ -11,7 +11,6 @@ class TodoListView extends StatefulWidget {
 }
 
 class _TodoListViewState extends State<TodoListView> {
-  final _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {

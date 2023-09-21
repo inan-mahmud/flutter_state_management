@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/config/app_colors.dart';
 
 @immutable
 class RoundedCorneredContainer extends StatelessWidget {
@@ -12,9 +13,9 @@ class RoundedCorneredContainer extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.lightBlueColor,
           border: Border.all(
-            color: Colors.white,
+            color: AppColors.lightBlueColor,
           ),
           borderRadius: BorderRadius.circular(
             10,

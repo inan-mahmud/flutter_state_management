@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/config/app_theme.dart';
 import 'package:flutter_state_management/src/core/di/locator.dart';
 import 'package:flutter_state_management/src/core/route/route_manager.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
@@ -27,8 +28,9 @@ class _MyAppState extends State<MyApp> {
         addTodoByCategoryUseCase: locator(),
         updateTodoUseCase: locator(),
       ),
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Todo App',
+        theme: AppTheme.dark,
         onGenerateRoute: RouteManager.generateRoute,
         initialRoute: Routes.home,
       ),
