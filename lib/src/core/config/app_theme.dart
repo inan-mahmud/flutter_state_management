@@ -30,6 +30,18 @@ class AppTheme {
         ),
       ),
     ),
+    listTileTheme: ListTileThemeData(
+      tileColor: AppColors.whiteColor,
+
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.lightBlueColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(
