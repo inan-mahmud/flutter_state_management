@@ -1,6 +1,6 @@
 import 'package:flutter_state_management/src/core/base/either.dart';
 import 'package:flutter_state_management/src/core/base/failure.dart';
-import 'package:flutter_state_management/src/features/important/domain/repositories/i_important_todos_repository.dart';
+import 'package:flutter_state_management/src/features/important_todos/domain/repositories/i_important_todos_repository.dart';
 import 'package:flutter_state_management/src/features/todo/domain/mapper/todo_mapper.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/result.dart';
 import 'package:flutter_state_management/src/core/utils/constants.dart';
-import 'package:flutter_state_management/src/features/important/ui/controllers/important_todo_controller.dart';
-import 'package:flutter_state_management/src/features/important/ui/provider/important_todo_controller_provider.dart';
+import 'package:flutter_state_management/src/features/important_todos/ui/controllers/important_todo_controller.dart';
+import 'package:flutter_state_management/src/features/important_todos/ui/provider/important_todo_controller_provider.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_list_view.dart';

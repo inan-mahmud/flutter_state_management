@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/important/ui/controllers/important_todo_controller.dart';
+import 'package:flutter_state_management/src/features/important_todos/ui/controllers/important_todo_controller.dart';
 
 class ImportantTodoControllerProvider extends InheritedWidget {
   final ImportantTodoController controller;
