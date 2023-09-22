@@ -7,6 +7,9 @@ import 'package:flutter_state_management/src/features/auth/sign_up/ui/sign_up_pa
 import 'package:flutter_state_management/src/features/category/ui/controllers/category_controller.dart';
 import 'package:flutter_state_management/src/features/category/ui/provider/categories_provider.dart';
 import 'package:flutter_state_management/src/features/category/ui/views/home_view.dart';
+import 'package:flutter_state_management/src/features/important/ui/controllers/important_todo_controller.dart';
+import 'package:flutter_state_management/src/features/important/ui/provider/important_todo_controller_provider.dart';
+import 'package:flutter_state_management/src/features/important/ui/views/important_todos_view.dart';
 import 'package:flutter_state_management/src/features/tasks/ui/tasks_page.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/todos_view.dart';
 import 'package:flutter_state_management/src/features/user_profile/ui/user_profile_page.dart';
@@ -30,14 +33,14 @@ class RouteManager {
           builder: (_) => const TodosView(),
           settings: routeSettings,
         );
-      case Routes.signIn:
+      case Routes.important:
         return MaterialPageRoute(
-          builder: (_) => const SignInPage(),
-          settings: routeSettings,
-        );
-      case Routes.signUp:
-        return MaterialPageRoute(
-          builder: (_) => const SignUpPage(),
+          builder: (_) => ImportantTodoControllerProvider(
+            controller: ImportantTodoController(
+              fetchImportantTodosUseCase: locator(),
+            ),
+            child: const ImportantTodosView(),
+          ),
           settings: routeSettings,
         );
       case Routes.tasks:
