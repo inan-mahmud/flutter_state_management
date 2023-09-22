@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/common/rounded_cornered_container.dart';
-import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
+import 'package:flutter_state_management/src/core/common/todo_item_check_box.dart';
+import 'package:flutter_state_management/src/core/config/app_colors.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 
@@ -15,8 +16,6 @@ class _TodoItemViewState extends State<TodoItemView> {
   @override
   Widget build(BuildContext context) {
     final todoModel = TodoModelProvider.of(context).todoModel;
-    final categoryModel = CategoryModelProvider.of(context).categoryModel;
-
     bool isImportant = todoModel.isImportant;
 
     return RoundedCorneredContainer(
@@ -35,27 +34,22 @@ class _TodoItemViewState extends State<TodoItemView> {
           todoModel.description,
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        trailing: Checkbox(
-          checkColor: Colors.white,
-          fillColor: MaterialStateProperty.all(
-              todoModel.isDone ? Colors.pinkAccent : Colors.white),
-          value: todoModel.isDone,
+        trailing: TodoItemCheckBox(
+          isChecked: todoModel.isDone,
           onChanged: (value) {
             final model = todoModel.copyWith(isDone: value);
-            TodoProvider.of(context)
-                .todoController
-                .updateTodo(categoryModel, model);
+            TodoProvider.of(context).todoController.updateTodo(model);
           },
         ),
         leading: IconButton(
           icon: todoModel.isImportant
               ? const Icon(
                   Icons.star,
-                  color: Colors.blue,
+                  color: AppColors.purpleColor,
                 )
               : const Icon(
                   Icons.star_border,
-                  color: Colors.blue,
+                  color: AppColors.purpleColor,
                 ),
           onPressed: () {
             setState(() {
@@ -63,9 +57,7 @@ class _TodoItemViewState extends State<TodoItemView> {
             });
             final model =
                 todoModel.copyWith(isImportant: !todoModel.isImportant);
-            TodoProvider.of(context)
-                .todoController
-                .updateTodo(categoryModel, model);
+            TodoProvider.of(context).todoController.updateTodo(model);
           },
         ),
       ),

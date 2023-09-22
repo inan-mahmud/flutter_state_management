@@ -11,11 +11,8 @@ class UpdateTodoUseCase {
 
   UpdateTodoUseCase({required this.todoRepository});
 
-  Either<Failure, int> updateTodo(
-      CategoryModel categoryModel, TodoModel todoModel) {
+  Either<Failure, int> updateTodo(TodoModel todoModel) {
     final todoEntity = todoModel.toEntity();
-    final categoryEntity = categoryModel.toEntity();
-    todoEntity.category.target = categoryEntity;
     final result = todoRepository.updateTodo(todoEntity);
     return result.fold(
       (exception) => Left(

@@ -49,8 +49,8 @@ class TodosController extends ChangeNotifier {
     });
   }
 
-  void updateTodo(CategoryModel categoryModel, TodoModel todoModel) {
-    final result = updateTodoUseCase.updateTodo(categoryModel, todoModel);
+  void updateTodo(TodoModel todoModel) {
+    final result = updateTodoUseCase.updateTodo(todoModel);
 
     result.fold((failure) {
       updateTodoResult = Error(failure.message);

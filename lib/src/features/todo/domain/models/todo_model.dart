@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 
 class TodoModel extends Equatable {
   final int id;
@@ -6,17 +7,20 @@ class TodoModel extends Equatable {
   final String description;
   final bool isDone;
   final bool isImportant;
+  final CategoryModel? categoryModel;
 
-  TodoModel({
+  const TodoModel({
     required this.id,
     required this.title,
     required this.description,
     required this.isDone,
     required this.isImportant,
+    this.categoryModel,
   });
 
   @override
-  List<Object?> get props => [id, title, description, isDone, isImportant];
+  List<Object?> get props =>
+      [id, title, description, isDone, isImportant, categoryModel];
 
   TodoModel copyWith({
     int? id,
@@ -24,6 +28,7 @@ class TodoModel extends Equatable {
     String? description,
     bool? isDone,
     bool? isImportant,
+    CategoryModel? model,
   }) =>
       TodoModel(
         id: id ?? this.id,
@@ -31,6 +36,7 @@ class TodoModel extends Equatable {
         description: description ?? this.description,
         isDone: isDone ?? this.isDone,
         isImportant: isImportant ?? this.isImportant,
+        categoryModel: model ?? categoryModel,
       );
 
   @override

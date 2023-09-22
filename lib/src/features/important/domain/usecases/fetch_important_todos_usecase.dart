@@ -15,11 +15,11 @@ class FetchImportantTodosUseCase {
     }, (todosStream) {
       return right(
         todosStream.map(
-          (todos) {
-            return todos.map((todo) {
-              return todo.toModel();
-            }).toList();
-          },
+          (todos) => todos
+              .map(
+                (todo) => todo.toModel(),
+              )
+              .toList(),
         ),
       );
     });
