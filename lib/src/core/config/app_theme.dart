@@ -30,9 +30,17 @@ class AppTheme {
         ),
       ),
     ),
-    listTileTheme: ListTileThemeData(
-      tileColor: AppColors.whiteColor,
-
+    listTileTheme: const ListTileThemeData(
+      titleTextStyle: TextStyle(
+        color: AppColors.whiteColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
+      subtitleTextStyle: TextStyle(
+        color: AppColors.whiteColor,
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.lightBlueColor,

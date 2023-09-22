@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/base/result.dart';
 import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
-import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/controllers/todos_controller.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list_provider.dart';
-import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
-import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_item_view.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_list_view.dart';
 
 class TodosView extends StatefulWidget {

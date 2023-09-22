@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/category/domain/usecase/create_category_usecase.dart';
 import 'package:flutter_state_management/src/features/category/domain/usecase/fetch_category_usecase.dart';
-import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
+import 'package:flutter_state_management/src/core/base/result.dart';
 
 class CategoryController extends ChangeNotifier {
   ValueNotifier<Result<int>> result = ValueNotifier(Init());

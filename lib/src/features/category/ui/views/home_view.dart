@@ -4,7 +4,7 @@ import 'package:flutter_state_management/src/core/route/routes.dart';
 import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/category/ui/controllers/category_controller.dart';
 import 'package:flutter_state_management/src/features/category/ui/provider/categories_provider.dart';
-import 'package:flutter_state_management/src/features/category/ui/state/home_state.dart';
+import 'package:flutter_state_management/src/core/base/result.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -51,51 +51,76 @@ class _HomeViewState extends State<HomeView> {
         automaticallyImplyLeading: false,
       ),
       body: SizedBox(
-        height: MediaQuery.sizeOf(context).height,
-        width: MediaQuery.sizeOf(context).width,
-        child: StreamBuilder<List<CategoryModel>>(
-          stream: _categoryController?.categoryStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final categories = snapshot.data!;
-              return categories.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        final category = snapshot.data![index];
-                        return InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.todos,
-                              arguments: category,
-                            );
-                          },
-                          child: RoundedCorneredContainer(
-                            child: ListTile(
-                              title: Text(
-                                category.title,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : const Center(
-                      child: Text('No Categories'),
-                    );
-            } else {
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }
-          },
-        ),
-      ),
+          height: MediaQuery.sizeOf(context).height,
+          width: MediaQuery.sizeOf(context).width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ListTile(
+                title: const Text('Important'),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.important,
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Tasks'),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.tasks,
+                  );
+                },
+              ),
+              StreamBuilder<List<CategoryModel>>(
+                stream: _categoryController?.categoryStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final categories = snapshot.data!;
+                    return categories.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final category = snapshot.data![index];
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.todos,
+                                    arguments: category,
+                                  );
+                                },
+                                child: RoundedCorneredContainer(
+                                  child: ListTile(
+                                    style:
+                                        Theme.of(context).listTileTheme.style,
+                                    title: Text(
+                                      category.title,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : const Center(
+                            child: Text('No Categories'),
+                          );
+                  } else {
+                    if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }
+                },
+              ),
+            ],
+          )),
       floatingActionButton: ValueListenableBuilder<Result>(
         valueListenable: _categoryController!.result,
         builder: (context, value, _) {

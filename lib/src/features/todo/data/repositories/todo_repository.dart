@@ -27,7 +27,6 @@ class TodoRepository implements ITodoRepository {
   Either<Exception, List<TodoEntity>> fetchTodos() {
     try {
       final todos = _todoBox.getAll();
-      print(todos);
       return right(todos);
     } on Exception catch (exception) {
       return left(exception);

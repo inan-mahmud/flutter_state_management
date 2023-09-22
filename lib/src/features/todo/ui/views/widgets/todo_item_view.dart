@@ -31,10 +31,10 @@ class _TodoItemViewState extends State<TodoItemView> {
                 : TextDecoration.none,
           ),
         ),
-        // subtitle: Text(
-        //   todoModel.description,
-        //   style: Theme.of(context).textTheme.bodySmall,
-        // ),
+        subtitle: Text(
+          todoModel.description,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
         trailing: Checkbox(
           checkColor: Colors.white,
           fillColor: MaterialStateProperty.all(
