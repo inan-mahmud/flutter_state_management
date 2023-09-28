@@ -11,11 +11,14 @@ class TasksController extends ChangeNotifier {
   Stream<Result<List<TodoModel>>> fetchTasks() async* {
     yield* fetchTasksUseCase.fetchTasks().fold(
       (failure) async* {
+        print(failure.message);
         yield Error(failure.message);
       },
       (stream) async* {
         yield* stream.map(
-          (List<TodoModel> todos) => Success(todos),
+          (List<TodoModel> todos) {
+            return Success(todos);
+          },
         );
       },
     );

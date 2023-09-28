@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/base/result.dart';
 import 'package:flutter_state_management/src/core/common/rounded_cornered_container.dart';
 import 'package:flutter_state_management/src/core/config/app_colors.dart';
 import 'package:flutter_state_management/src/core/route/routes.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_state_management/src/core/utils/constants.dart';
 import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/category/ui/controllers/category_controller.dart';
 import 'package:flutter_state_management/src/features/category/ui/provider/categories_provider.dart';
-import 'package:flutter_state_management/src/core/base/result.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -147,32 +147,33 @@ class _HomeViewState extends State<HomeView> {
           return FloatingActionButton(
             onPressed: () {
               showAdaptiveDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                        title: const Text('Add new Category'),
-                        content: TextField(
-                          controller: textController,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: const Text('Add new Category'),
+                      content: TextField(
+                        controller: textController,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              _categoryController?.createCategory(
-                                textController.text,
-                              );
-                              textController.clear();
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Create'),
-                          ),
-                        ]);
-                  });
+                        TextButton(
+                          onPressed: () {
+                            _categoryController?.createCategory(
+                              textController.text,
+                            );
+                            textController.clear();
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Create'),
+                        ),
+                      ]);
+                },
+              );
             },
             child: const Icon(Icons.add),
           );
