@@ -1,5 +1,4 @@
 import 'package:flutter_state_management/src/features/todo/data/entities/todo_entity.dart';
-import 'package:flutter_state_management/src/features/user_profile/data/entity/user_entity.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

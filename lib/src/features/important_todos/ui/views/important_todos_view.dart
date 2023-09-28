@@ -76,7 +76,7 @@ class _ImportantTodosViewState extends State<ImportantTodosView> {
                 );
               } else {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: Text('No Todos')
                 );
               }
             },

@@ -8,9 +8,7 @@ import 'package:flutter_state_management/src/features/category/ui/views/home_vie
 import 'package:flutter_state_management/src/features/important_todos/ui/controllers/important_todo_controller.dart';
 import 'package:flutter_state_management/src/features/important_todos/ui/provider/important_todo_controller_provider.dart';
 import 'package:flutter_state_management/src/features/important_todos/ui/views/important_todos_view.dart';
-import 'package:flutter_state_management/src/features/tasks/ui/tasks_page.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/todos_view.dart';
-import 'package:flutter_state_management/src/features/user_profile/ui/user_profile_page.dart';
 
 class RouteManager {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -39,16 +37,6 @@ class RouteManager {
             ),
             child: const ImportantTodosView(),
           ),
-          settings: routeSettings,
-        );
-      case Routes.tasks:
-        return MaterialPageRoute(
-          builder: (_) => const TasksPage(),
-          settings: routeSettings,
-        );
-      case Routes.userProfile:
-        return MaterialPageRoute(
-          builder: (_) => const UserProfilePage(),
           settings: routeSettings,
         );
       default:

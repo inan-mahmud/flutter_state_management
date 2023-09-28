@@ -43,14 +43,6 @@
           "relationTarget": "CategoryEntity"
         },
         {
-          "id": "7:6237137262047748236",
-          "name": "userId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "3:1458294110807907963",
-          "relationTarget": "UserEntity"
-        },
-        {
           "id": "8:7723279877325950793",
           "name": "createdAt",
           "type": 10
@@ -59,30 +51,6 @@
           "id": "9:1380786025019093210",
           "name": "updatedAt",
           "type": 10
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "3:1041259315090196693",
-      "lastPropertyId": "3:5323217069608808919",
-      "name": "UserEntity",
-      "properties": [
-        {
-          "id": "1:7912455094688571189",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:1811306061798902167",
-          "name": "userName",
-          "type": 9
-        },
-        {
-          "id": "3:5323217069608808919",
-          "name": "email",
-          "type": 9
         }
       ],
       "relations": []
@@ -124,15 +92,22 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    6848051843973750637
+    6848051843973750637,
+    1041259315090196693
   ],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    1458294110807907963
+  ],
   "retiredPropertyUids": [
     8851284691176375205,
     4332862999620941104,
     4951578403033103094,
     2231288387448193202,
-    2855717816864190171
+    2855717816864190171,
+    6237137262047748236,
+    7912455094688571189,
+    1811306061798902167,
+    5323217069608808919
   ],
   "retiredRelationUids": [],
   "version": 1

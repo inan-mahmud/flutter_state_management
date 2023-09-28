@@ -16,7 +16,6 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'src/features/category/data/entities/category_entity.dart';
 import 'src/features/todo/data/entities/todo_entity.dart';
-import 'src/features/user_profile/data/entity/user_entity.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -60,13 +59,6 @@ final _entities = <ModelEntity>[
             indexId: const IdUid(2, 7236215816285656044),
             relationTarget: 'CategoryEntity'),
         ModelProperty(
-            id: const IdUid(7, 6237137262047748236),
-            name: 'userId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(3, 1458294110807907963),
-            relationTarget: 'UserEntity'),
-        ModelProperty(
             id: const IdUid(8, 7723279877325950793),
             name: 'createdAt',
             type: 10,
@@ -75,30 +67,6 @@ final _entities = <ModelEntity>[
             id: const IdUid(9, 1380786025019093210),
             name: 'updatedAt',
             type: 10,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(3, 1041259315090196693),
-      name: 'UserEntity',
-      lastPropertyId: const IdUid(3, 5323217069608808919),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 7912455094688571189),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 1811306061798902167),
-            name: 'userName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 5323217069608808919),
-            name: 'email',
-            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -167,14 +135,18 @@ ModelDefinition getObjectBoxModel() {
       lastIndexId: const IdUid(3, 1458294110807907963),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [6848051843973750637],
-      retiredIndexUids: const [],
+      retiredEntityUids: const [6848051843973750637, 1041259315090196693],
+      retiredIndexUids: const [1458294110807907963],
       retiredPropertyUids: const [
         8851284691176375205,
         4332862999620941104,
         4951578403033103094,
         2231288387448193202,
-        2855717816864190171
+        2855717816864190171,
+        6237137262047748236,
+        7912455094688571189,
+        1811306061798902167,
+        5323217069608808919
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -184,7 +156,7 @@ ModelDefinition getObjectBoxModel() {
   final bindings = <Type, EntityDefinition>{
     TodoEntity: EntityDefinition<TodoEntity>(
         model: _entities[0],
-        toOneRelations: (TodoEntity object) => [object.category, object.user],
+        toOneRelations: (TodoEntity object) => [object.category],
         toManyRelations: (TodoEntity object) => {},
         getId: (TodoEntity object) => object.id,
         setId: (TodoEntity object, int id) {
@@ -200,7 +172,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addBool(3, object.isDone);
           fbb.addBool(4, object.isImportant);
           fbb.addInt64(5, object.category.targetId);
-          fbb.addInt64(6, object.user.targetId);
           fbb.addInt64(7, object.createdAt.millisecondsSinceEpoch);
           fbb.addInt64(8, object.updatedAt.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
@@ -235,45 +206,10 @@ ModelDefinition getObjectBoxModel() {
           object.category.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
           object.category.attach(store);
-          object.user.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
-          object.user.attach(store);
-          return object;
-        }),
-    UserEntity: EntityDefinition<UserEntity>(
-        model: _entities[1],
-        toOneRelations: (UserEntity object) => [],
-        toManyRelations: (UserEntity object) => {},
-        getId: (UserEntity object) => object.id,
-        setId: (UserEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (UserEntity object, fb.Builder fbb) {
-          final userNameOffset = fbb.writeString(object.userName);
-          final emailOffset = fbb.writeString(object.email);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, userNameOffset);
-          fbb.addOffset(2, emailOffset);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final userNameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final emailParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final object = UserEntity(
-              id: idParam, userName: userNameParam, email: emailParam);
-
           return object;
         }),
     CategoryEntity: EntityDefinition<CategoryEntity>(
-        model: _entities[2],
+        model: _entities[1],
         toOneRelations: (CategoryEntity object) => [],
         toManyRelations: (CategoryEntity object) => {
               RelInfo<TodoEntity>.toOneBacklink(6, object.id,
@@ -347,49 +283,30 @@ class TodoEntity_ {
   static final category = QueryRelationToOne<TodoEntity, CategoryEntity>(
       _entities[0].properties[5]);
 
-  /// see [TodoEntity.user]
-  static final user =
-      QueryRelationToOne<TodoEntity, UserEntity>(_entities[0].properties[6]);
-
   /// see [TodoEntity.createdAt]
   static final createdAt =
-      QueryIntegerProperty<TodoEntity>(_entities[0].properties[7]);
+      QueryIntegerProperty<TodoEntity>(_entities[0].properties[6]);
 
   /// see [TodoEntity.updatedAt]
   static final updatedAt =
-      QueryIntegerProperty<TodoEntity>(_entities[0].properties[8]);
-}
-
-/// [UserEntity] entity fields to define ObjectBox queries.
-class UserEntity_ {
-  /// see [UserEntity.id]
-  static final id =
-      QueryIntegerProperty<UserEntity>(_entities[1].properties[0]);
-
-  /// see [UserEntity.userName]
-  static final userName =
-      QueryStringProperty<UserEntity>(_entities[1].properties[1]);
-
-  /// see [UserEntity.email]
-  static final email =
-      QueryStringProperty<UserEntity>(_entities[1].properties[2]);
+      QueryIntegerProperty<TodoEntity>(_entities[0].properties[7]);
 }
 
 /// [CategoryEntity] entity fields to define ObjectBox queries.
 class CategoryEntity_ {
   /// see [CategoryEntity.id]
   static final id =
-      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[0]);
+      QueryIntegerProperty<CategoryEntity>(_entities[1].properties[0]);
 
   /// see [CategoryEntity.title]
   static final title =
-      QueryStringProperty<CategoryEntity>(_entities[2].properties[1]);
+      QueryStringProperty<CategoryEntity>(_entities[1].properties[1]);
 
   /// see [CategoryEntity.createdAt]
   static final createdAt =
-      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[2]);
+      QueryIntegerProperty<CategoryEntity>(_entities[1].properties[2]);
 
   /// see [CategoryEntity.updatedAt]
   static final updatedAt =
-      QueryIntegerProperty<CategoryEntity>(_entities[2].properties[3]);
+      QueryIntegerProperty<CategoryEntity>(_entities[1].properties[3]);
 }
