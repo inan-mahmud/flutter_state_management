@@ -47,6 +47,7 @@ class RouteManager {
           builder: (_) => TasksControllerProvider(
             controller: TasksController(
               fetchTasksUseCase: locator(),
+              addTaskUseCase: locator(),
             ),
             child: const TaskView(),
           ),

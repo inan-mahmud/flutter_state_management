@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/result.dart';
 import 'package:flutter_state_management/src/core/config/app_colors.dart';
+import 'package:flutter_state_management/src/core/extensions/route_extension.dart';
+import 'package:flutter_state_management/src/core/extensions/snackbar_extension.dart';
 import 'package:flutter_state_management/src/core/utils/constants.dart';
 import 'package:flutter_state_management/src/features/tasks/ui/controllers/tasks_controller.dart';
 import 'package:flutter_state_management/src/features/tasks/ui/provider/tasks_provider.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list_provider.dart';
+import 'package:flutter_state_management/src/features/todo/ui/views/widgets/add_todo_view.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_list_view.dart';
 
 class TaskView extends StatefulWidget {
@@ -30,11 +33,25 @@ class _TaskViewState extends State<TaskView> {
     final controller = TasksControllerProvider.of(context).controller;
     if (_tasksController != controller || _tasksController == null) {
       _tasksController = controller;
+      _tasksController?.addListener(_onStateChange);
     }
   }
 
   void _initTodos() {
     _taskStream = _tasksController?.fetchTasks();
+  }
+
+  void _onStateChange() {
+    if (mounted) {
+      _tasksController?.todoResult.maybeWhen(
+        failure: (message) {
+          context.showSnackBar(message);
+        },
+        success: (id) {
+          context.showSnackBar(AppConstants.taskAdded);
+        },
+      );
+    }
   }
 
   @override
@@ -104,13 +121,27 @@ class _TaskViewState extends State<TaskView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => AddTodoView(
+              onAddTodo: (title, description) {
+                _tasksController?.addTodo(title, description);
+                context.goBack();
+              },
+            ),
+            enableDrag: true,
+          );
         },
-        child: const Icon(
-          Icons.add,
-          color: AppColors.backgroundColor,
-        ),
+        child: const Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _tasksController?.removeListener(_onStateChange);
+    _tasksController?.dispose();
+    super.dispose();
   }
 }

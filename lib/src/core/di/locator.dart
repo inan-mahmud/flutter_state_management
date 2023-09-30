@@ -8,6 +8,7 @@ import 'package:flutter_state_management/src/features/important_todos/domain/rep
 import 'package:flutter_state_management/src/features/important_todos/domain/usecases/fetch_important_todos_usecase.dart';
 import 'package:flutter_state_management/src/features/tasks/data/repositories/tasks_repository.dart';
 import 'package:flutter_state_management/src/features/tasks/domain/repositories/i_tasks_repository.dart';
+import 'package:flutter_state_management/src/features/tasks/domain/usecases/add_tasks_usecase.dart';
 import 'package:flutter_state_management/src/features/tasks/domain/usecases/fetch_tasks_usecase.dart';
 import 'package:flutter_state_management/src/features/todo/data/repositories/todo_repository.dart';
 import 'package:flutter_state_management/src/features/todo/domain/repositories/i_todo_repository.dart';
@@ -79,6 +80,11 @@ Future<void> setupLocator() async {
 
   locator.registerFactory<FetchTasksUseCase>(
     () => FetchTasksUseCase(
+      tasksRepository: locator(),
+    ),
+  );
+  locator.registerFactory<AddTaskUseCase>(
+    () => AddTaskUseCase(
       tasksRepository: locator(),
     ),
   );

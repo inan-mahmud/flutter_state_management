@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
-import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
-import 'package:flutter_state_management/src/features/todo/ui/provider/todo_provider.dart';
+import 'package:flutter_state_management/src/core/utils/typedefs.dart';
 
 class AddTodoView extends StatefulWidget {
-  const AddTodoView({super.key});
+  final AddTodoCallback onAddTodo;
+
+  const AddTodoView({super.key, required this.onAddTodo});
 
   @override
   State<AddTodoView> createState() => _AddTodoViewState();
@@ -16,9 +16,6 @@ class _AddTodoViewState extends State<AddTodoView> {
 
   @override
   Widget build(BuildContext context) {
-    final todoController = TodoProvider.of(context).todoController;
-    final categoryModel = CategoryModelProvider.of(context).categoryModel;
-
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Column(
@@ -50,12 +47,8 @@ class _AddTodoViewState extends State<AddTodoView> {
           ),
           ElevatedButton(
             onPressed: () {
-              todoController.addTodo(
-                categoryModel,
-                todoTitleController.text,
-                todoDescriptionController.text,
-              );
-              Navigator.pop(context);
+              widget.onAddTodo(
+                  todoTitleController.text, todoDescriptionController.text);
             },
             child: const Text('Add'),
           ),

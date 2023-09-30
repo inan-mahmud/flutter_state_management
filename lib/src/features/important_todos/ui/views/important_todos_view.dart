@@ -44,43 +44,42 @@ class _ImportantTodosViewState extends State<ImportantTodosView> {
         title: const Text(AppConstants.appName),
       ),
       body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: StreamBuilder<Result<List<TodoModel>>>(
-            stream: _importantTodosStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final result = snapshot.data!;
-                return result.when(
-                  initial: () {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                  loading: () {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                  success: (data) {
-                    return TodoListProvider(
-                      todoList: data,
-                      child: const TodoListView(),
-                    );
-                  },
-                  failure: (message) {
-                    return Center(
-                      child: Text(message),
-                    );
-                  },
-                );
-              } else {
-                return const Center(
-                  child: Text('No Todos')
-                );
-              }
-            },
-          )),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: StreamBuilder<Result<List<TodoModel>>>(
+          stream: _importantTodosStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final result = snapshot.data!;
+              return result.when(
+                initial: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                success: (data) {
+                  return TodoListProvider(
+                    todoList: data,
+                    child: const TodoListView(),
+                  );
+                },
+                failure: (message) {
+                  return Center(
+                    child: Text(message),
+                  );
+                },
+              );
+            } else {
+              return const Center(child: Text('No Todos'));
+            }
+          },
+        ),
+      ),
     );
   }
 }

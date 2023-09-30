@@ -26,4 +26,14 @@ class TaskRepository implements ITasksRepository {
       return left(exception);
     }
   }
+
+  @override
+  Either<Exception, int> addTask(TodoEntity todoEntity) {
+    try {
+      final id = _taskBox.put(todoEntity);
+      return right(id);
+    } on Exception catch (exception) {
+      return left(exception);
+    }
+  }
 }

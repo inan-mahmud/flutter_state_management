@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/result.dart';
+import 'package:flutter_state_management/src/core/extensions/route_extension.dart';
+import 'package:flutter_state_management/src/core/extensions/snackbar_extension.dart';
+import 'package:flutter_state_management/src/core/utils/constants.dart';
 import 'package:flutter_state_management/src/features/category/domain/models/category_model.dart';
 import 'package:flutter_state_management/src/features/category/ui/provider/category_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/domain/models/todo_model.dart';
@@ -45,18 +48,9 @@ class _TodosViewState extends State<TodosView> {
   void _onUpdateTodoStateChange() {
     if (mounted) {
       _todosController?.updateTodoResult.maybeWhen(failure: (message) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+        context.showSnackBar(message);
       }, success: (id) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Todo Updated'),
-            duration: Duration(
-              milliseconds: 500,
-            ),
-          ),
-        );
+        context.showSnackBar(AppConstants.todoAdded);
       });
     }
   }
@@ -119,7 +113,12 @@ class _TodosViewState extends State<TodosView> {
             context: context,
             builder: (context) => CategoryModelProvider(
               categoryModel: _categoryModel,
-              child: const AddTodoView(),
+              child: AddTodoView(
+                onAddTodo: (title, description) {
+                  _todosController?.addTodo(_categoryModel, title, description);
+                  context.goBack();
+                },
+              ),
             ),
             enableDrag: true,
           );
@@ -127,5 +126,12 @@ class _TodosViewState extends State<TodosView> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _todosController?.removeListener(_onUpdateTodoStateChange);
+    _todosController?.dispose();
+    super.dispose();
   }
 }

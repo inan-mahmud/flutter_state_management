@@ -6,4 +6,9 @@ abstract class AppConstants {
   static const String important = 'Important';
   static const String noTasks =
       "Tasks show up here if they aren't part of any categories you've created.";
+  static const String categoryAdded = "Category Added";
+  static const String taskAdded = "Task Added";
+  static const String todoAdded = "Todo Added";
+  static const String createCategory = "Add new Category";
+  static const String create = "Create";
 }
