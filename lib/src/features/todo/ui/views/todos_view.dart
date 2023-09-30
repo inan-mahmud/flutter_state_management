@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/result.dart';
+import 'package:flutter_state_management/src/core/common/todo_floating_action_button.dart';
 import 'package:flutter_state_management/src/core/extensions/route_extension.dart';
 import 'package:flutter_state_management/src/core/extensions/snackbar_extension.dart';
 import 'package:flutter_state_management/src/core/utils/constants.dart';
@@ -58,80 +59,69 @@ class _TodosViewState extends State<TodosView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todos'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: SizedBox(
-        height: MediaQuery.sizeOf(context).height,
-        width: MediaQuery.sizeOf(context).width,
-        child: StreamBuilder<Result<List<TodoModel>>>(
-          stream: _todoStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data!.when(
-                initial: () {
-                  return const SizedBox();
-                },
-                loading: () {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                success: (List<TodoModel> data) {
-                  return data.isNotEmpty
-                      ? CategoryModelProvider(
-                          categoryModel: _categoryModel,
-                          child: TodoListProvider(
-                            todoList: data,
-                            child: const TodoListView(),
-                          ),
-                        )
-                      : const Center(
-                          child: Text('No todos'),
-                        );
-                },
-                failure: (String message) {
-                  return Center(
-                    child: Text(message),
-                  );
-                },
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+        appBar: AppBar(
+          title: const Text('Todos'),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => CategoryModelProvider(
-              categoryModel: _categoryModel,
-              child: AddTodoView(
-                onAddTodo: (title, description) {
-                  _todosController?.addTodo(_categoryModel, title, description);
-                  context.goBack();
-                },
-              ),
+        body: SizedBox(
+          height: MediaQuery.sizeOf(context).height,
+          width: MediaQuery.sizeOf(context).width,
+          child: StreamBuilder<Result<List<TodoModel>>>(
+            stream: _todoStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return snapshot.data!.when(
+                  initial: () {
+                    return const SizedBox();
+                  },
+                  loading: () {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  success: (List<TodoModel> data) {
+                    return data.isNotEmpty
+                        ? CategoryModelProvider(
+                            categoryModel: _categoryModel,
+                            child: TodoListProvider(
+                              todoList: data,
+                              child: const TodoListView(),
+                            ),
+                          )
+                        : const Center(
+                            child: Text('No todos'),
+                          );
+                  },
+                  failure: (String message) {
+                    return Center(
+                      child: Text(message),
+                    );
+                  },
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+        floatingActionButton: TodoFloatingActionButton(
+          widget: CategoryModelProvider(
+            categoryModel: _categoryModel,
+            child: AddTodoView(
+              onAddTodo: (title, description) {
+                _todosController?.addTodo(_categoryModel, title, description);
+                context.goBack();
+              },
             ),
-            enableDrag: true,
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+          ),
+        ));
   }
 
   @override
   void dispose() {
-    _todosController?.removeListener(_onUpdateTodoStateChange);
-    _todosController?.dispose();
     super.dispose();
   }
 }

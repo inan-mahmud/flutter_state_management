@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/src/core/config/app_colors.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_list_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/provider/todo_model_provider.dart';
 import 'package:flutter_state_management/src/features/todo/ui/views/widgets/todo_item_view.dart';
@@ -46,7 +47,7 @@ class _TodoListViewState extends State<TodoListView> {
               child: Text(
                 'Completed',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: AppColors.whiteColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),

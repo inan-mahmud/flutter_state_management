@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/src/core/base/result.dart';
+import 'package:flutter_state_management/src/core/common/todo_floating_action_button.dart';
 import 'package:flutter_state_management/src/core/config/app_colors.dart';
 import 'package:flutter_state_management/src/core/extensions/route_extension.dart';
 import 'package:flutter_state_management/src/core/extensions/snackbar_extension.dart';
@@ -119,21 +120,13 @@ class _TaskViewState extends State<TaskView> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => AddTodoView(
-              onAddTodo: (title, description) {
-                _tasksController?.addTodo(title, description);
-                context.goBack();
-              },
-            ),
-            enableDrag: true,
-          );
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: TodoFloatingActionButton(
+        widget: AddTodoView(
+          onAddTodo: (title, description) {
+            _tasksController?.addTodo(title, description);
+            context.goBack();
+          },
+        ),
       ),
     );
   }
