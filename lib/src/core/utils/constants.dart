@@ -9,6 +9,7 @@ abstract class AppConstants {
   static const String categoryAdded = "Category Added";
   static const String taskAdded = "Task Added";
   static const String todoAdded = "Todo Added";
+  static const String todoUpdated = "Todo Updated";
   static const String createCategory = "Add new Category";
   static const String create = "Create";
 }

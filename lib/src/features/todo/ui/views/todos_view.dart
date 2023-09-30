@@ -51,7 +51,7 @@ class _TodosViewState extends State<TodosView> {
       _todosController?.updateTodoResult.maybeWhen(failure: (message) {
         context.showSnackBar(message);
       }, success: (id) {
-        context.showSnackBar(AppConstants.todoAdded);
+        context.showSnackBar(AppConstants.todoUpdated);
       });
     }
   }

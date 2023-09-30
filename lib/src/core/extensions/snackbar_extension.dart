@@ -7,9 +7,15 @@ extension SnackBarExtension on BuildContext {
       SnackBar(
         content: Text(
           message,
-          style: Theme.of(this).textTheme.bodySmall,
+          style: const TextStyle(
+            color: AppColors.darkBlueColor,
+            fontSize: 16,
+          ),
         ),
         backgroundColor: AppColors.whiteColor,
+        duration: Duration(
+          milliseconds: 500,
+        ),
       ),
     );
   }
